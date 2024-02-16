@@ -1,0 +1,6 @@
+# .gitignore
+
+
+Generated_data/
+Results/
+src_data/
