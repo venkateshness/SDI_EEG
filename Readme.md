@@ -35,7 +35,7 @@ Briefly, this work contributes to understanding more about the relationship of t
     └── requirements.txt
 ```
 
-This repo contains all the code-related files from `src_scripts`. `src_data` and `Generated_data` can be found in https://osf.io/rjuap/. `src_data` contains the source/raw data necessary for the analysis. `Generated_data` are the intermediate data generated during analysis, and are used for subsequent steps. Code for selecting the subjects to downloading the data to generating final figures are provided below.
+This repo contains all the code-related files from `src_scripts`. `src_data` and `Generated_data` can be found in https://osf.io/rjuap/. `src_data` contains the source/raw data necessary for the analysis. `Generated_data` are the intermediate data generated during analysis, and are used for subsequent steps.
 
 ## Dataset Downloader
 We analyse subset of the data acquired by Healthy Brain Network (HBN). `_2_Downloading_from_AWS.sh` downloads the data necessary. Run them as `sh _2_Downloading_from_AWS.sh <sub_list>`. The `<sub_list>` can be obtained by running `_1_parsing_for_subjects.py`.
@@ -59,6 +59,6 @@ Additionally, SDI compared across frequency bands at the macro-level (Yeo-Kriene
 
 INFO 1: Decoding script runs on older version of NiMare (0.0.14). Latest version requires Pandas 2.2.0, for which some part of the code is deprecated. I recommend to create a new environment for NiMare 0.0.14. Analysis pipeline + Decoding are guaranteed to run without any trouble.
 
-INFO 2: `src_data/` in the OSF repo does not contain the raw Healthy Brain Network (HBN), can be downloaded using `_2_Downloading_from_AWS.sh`
+INFO 2: `src_data/` in the OSF repo does not contain the raw Healthy Brain Network (HBN) data, can be downloaded using `_2_Downloading_from_AWS.sh`
 
 HBN imaging and EEG data are shared under the Creative Commons Attribution 4.0 International License (CC-BY-4.0). The shared data also includes preprocessed and generated data applicable to this study.
