@@ -50,7 +50,11 @@ Please refer to the guide at https://hackmd.io/@venki159/BJ1RGHbJp for a detaile
 `_5_SDI_with_util_functions_individual_graphs.py` computes SDI with the individual graphs, and the `_5_SDI_with_util_functions_consensus_graphs.py` for the group-specific consensus graphs. Both use the utility functions from `utility_functions.py`. Related stats procedure can be found in `_8_SDI_statistics.py`. 
 
 The above scripts are for the main analysis. What follows are for the analysis described in the supplementary material
+
 ## Inter-subject correlation
 `_10_ISC.py` computes the correlation of cortical activity among subjects using Correlated Component Analysis (CorrCA). This script makes use of the utility script `util_5_CorrCA.py`. Once estimated, SDI is computed specifically for certain segments in the video and the related script is in `_10_SDI_Strongest_ISC.py`.
 
 Additionally, SDI compared across frequency bands at the macro-level (Yeo-Krienen networks), script is in `yeo_krienen_network.py`
+
+
+INFO: Decoding script runs on older version of NiMare (0.0.14). Latest version requires Pandas 2.2.0, for which some part of the code is deprecated. I recommend to create a new environment for NiMare 0.0.14. Analysis pipeline + Decoding are guaranteed to run without any trouble.
