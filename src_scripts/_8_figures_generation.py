@@ -18,7 +18,7 @@ importlib.reload(utility_functions)
 
 mnitemp = fetch_icbm152_2009()
 HOMEDIR = "/users/local/Venkatesh/structure-function-eeg/"
-graph  = np.load(f"{HOMEDIR}/src_data/adj_matrix.npz")
+graph  = np.load(f"{HOMEDIR}/src_data/individual_graphs.npz")
 path_Glasser = f"{HOMEDIR}/src_data/Glasser_masker.nii.gz"
 
 plt.style.use('seaborn-whitegrid')

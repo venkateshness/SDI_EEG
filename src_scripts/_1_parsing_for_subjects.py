@@ -1,10 +1,10 @@
 #%%
 import scipy
-from scipy import io
 import numpy as np
 import pandas as pd
 import ezodf
 import os
+
 
 HOMEDIR = "/users/local/Venkatesh/structure-function-eeg/"  # os.path.abspath(os.getcwd())
 
@@ -76,14 +76,15 @@ total_subjects = list(
 # final_subject_list = list()
 # for i in range(len(total_subjects)):
 #     path_to_file = (
-#         f"{HOMEDIR}/src_data/HBN_dataset/%s/RestingState_data.csv" %
+#         f"{HOMEDIR}/src_data/rest/%s/RestingState_data.csv" %
 #         total_subjects[i])
 #     path_to_file_video = (
-#         f"{HOMEDIR}/src_data/HBN_dataset/%s/Video3_event.csv" %
+#         f"{HOMEDIR}/src_data/video1/%s/Video3_event.csv" %
 #         total_subjects[i])
 
 #     if os.path.isfile(path_to_file) and os.path.isfile(path_to_file_video):
 #         final_subject_list.append(total_subjects[i])
+#print(len(final_subject_list)) # 43
 
 print("N = ", len(total_subjects))
 
@@ -92,4 +93,3 @@ with open(f"{HOMEDIR}/src_data/subjects_to_download_for.txt", "w") as output:
         for row in range(len(out)):
             output.write(out[row]+'\n')
 
-# %%

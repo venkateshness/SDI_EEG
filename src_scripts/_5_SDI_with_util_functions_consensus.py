@@ -57,10 +57,10 @@ def SDI(graph, condition):
     np.savez_compressed(f"{HOMEDIR}/Generated_data/{condition}/Graph_SDI_related/surrogate_SDI.npz", **surrogate_SDI_bundle)
 #%%
 #movie
-graph  = np.load(f"{HOMEDIR}/src_data/adj_matrix.npz")
+graph  = np.load(f"{HOMEDIR}/src_data/individual_graphs.npz")
 movie_SDI = SDI(graph, 'video1_consensus')
 #%%
 #rest
-graph  = np.load(f"{HOMEDIR}/src_data/adj_matrix.npz")
+graph  = np.load(f"{HOMEDIR}/src_data/individual_graphs.npz")
 SDI(graph, 'rest_consensus')
 # %%

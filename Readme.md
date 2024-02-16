@@ -57,4 +57,8 @@ The above scripts are for the main analysis. What follows are for the analysis d
 Additionally, SDI compared across frequency bands at the macro-level (Yeo-Krienen networks), script is in `yeo_krienen_network.py`
 
 
-INFO: Decoding script runs on older version of NiMare (0.0.14). Latest version requires Pandas 2.2.0, for which some part of the code is deprecated. I recommend to create a new environment for NiMare 0.0.14. Analysis pipeline + Decoding are guaranteed to run without any trouble.
+INFO 1: Decoding script runs on older version of NiMare (0.0.14). Latest version requires Pandas 2.2.0, for which some part of the code is deprecated. I recommend to create a new environment for NiMare 0.0.14. Analysis pipeline + Decoding are guaranteed to run without any trouble.
+
+INFO 2: `src_data/` in the OSF repo does not contain the raw Healthy Brain Network (HBN), can be downloaded using `_2_Downloading_from_AWS.sh`
+
+HBN imaging and EEG data are shared under the Creative Commons Attribution 4.0 International License (CC-BY-4.0). The shared data also includes preprocessed and generated data applicable to this study.

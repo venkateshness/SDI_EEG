@@ -20,7 +20,7 @@ path_Glasser = f"{HOMEDIR}/src_data/Glasser_masker.nii.gz"
 mnitemp = fetch_icbm152_2009()
 
 
-graph  = np.load(f"{HOMEDIR}/src_data/adj_matrix.npz")
+graph  = np.load(f"{HOMEDIR}/src_data/individual_graphs.npz")
 
 n_subjects = 43
 n_roi = 360
