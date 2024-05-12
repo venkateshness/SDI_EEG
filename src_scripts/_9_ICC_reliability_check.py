@@ -23,14 +23,21 @@ def ICC_compute(condition1, condition2):
 ##############
 ##ICC between Video 1 and Video 2/ Fig2 panel c and Fig 4 panel a
 ##############
-signal_for_corrected_movie = np.load(f"{HOMEDIR}/Generated_data/Data_for_plots/empirical_SDI_video.npz")['wideband']
-signal_for_corrected_anvideo = np.load(f"{HOMEDIR}/Generated_data/Data_for_plots/empirical_SDI_anvideo.npz")['wideband']
+signal_for_corrected_movie = np.load(f"{HOMEDIR}/Generated_data/Data_for_plots/grouplevel_SDI_video2.npz")['widerband']
+signal_for_corrected_anvideo = np.load(f"{HOMEDIR}/Generated_data/Data_for_plots/grouplevel_SDI_rest.npz")['widerband']
 icc_video1_and_video2 = ICC_compute(signal_for_corrected_movie, signal_for_corrected_anvideo)
-
 
 ##############
 ##ICC between contrast maps. Fig2 panel e and Fig 4 panel b
 ##############
-video1_vs_rest = np.load(f"{HOMEDIR}/Generated_data/Data_for_plots/SDI_corrected_movie_vs_rest_wideband.npz")['wideband']
-video2_vs_rest = np.load(f"{HOMEDIR}/Generated_data/Data_for_plots/SDI_corrected_anvideo_vs_rest_wideband.npz")['SDI_corrected_anvideo_vs_rest']
+
+
+video1_vs_rest = np.load(f"{HOMEDIR}/Generated_data/Data_for_plots/SDI_corrected_movie_vs_rest_widerband.npz")['widerband']
+video2_vs_rest = np.load(f"{HOMEDIR}/Generated_data/Data_for_plots/SDI_corrected_anvideo_vs_rest_widerband.npz")['widerband']
 ICC_contrast = ICC_compute(video1_vs_rest, video2_vs_rest)
+
+# %%
+icc_video1_and_video2
+# %%
+ICC_contrast
+# %%

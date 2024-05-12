@@ -47,12 +47,12 @@ nw_low_beta=[]
 nw_high_beta=[]
 nw_gamma=[]
 
-video_watching_SDI_theta=np.log2(np.load(f"{HOMEDIR}/Generated_data/movie/Graph_SDI_related/empirical_SDI.npz")['theta'])
-video_watching_SDI_alpha=np.log2(np.load(f"{HOMEDIR}/Generated_data/movie/Graph_SDI_related/empirical_SDI.npz")['alpha'])
-video_watching_SDI_low_beta=np.log2(np.load(f"{HOMEDIR}/Generated_data/movie/Graph_SDI_related/empirical_SDI.npz")['low_beta'])
-video_watching_SDI_high_beta=np.log2(np.load(f"{HOMEDIR}/Generated_data/movie/Graph_SDI_related/empirical_SDI.npz")['high_beta'])
-video_watching_SDI_gamma=np.log2(np.load(f"{HOMEDIR}/Generated_data/movie/Graph_SDI_related/empirical_SDI.npz")['gamma'])
-video_watching_SDI = np.log2(np.load(f"{HOMEDIR}/Generated_data/movie/Graph_SDI_related/empirical_SDI.npz")['wideband'])
+video_watching_SDI_theta=np.log2(np.load(f"{HOMEDIR}/Generated_data/video1/Graph_SDI_related/empirical_SDI.npz")['theta'])
+video_watching_SDI_alpha=np.log2(np.load(f"{HOMEDIR}/Generated_data/video1/Graph_SDI_related/empirical_SDI.npz")['alpha'])
+video_watching_SDI_low_beta=np.log2(np.load(f"{HOMEDIR}/Generated_data/video1/Graph_SDI_related/empirical_SDI.npz")['low_beta'])
+video_watching_SDI_high_beta=np.log2(np.load(f"{HOMEDIR}/Generated_data/video1/Graph_SDI_related/empirical_SDI.npz")['high_beta'])
+video_watching_SDI_gamma=np.log2(np.load(f"{HOMEDIR}/Generated_data/video1/Graph_SDI_related/empirical_SDI.npz")['gamma'])
+video_watching_SDI = np.log2(np.load(f"{HOMEDIR}/Generated_data/video1/Graph_SDI_related/empirical_SDI.npz")['wideband'])
 for i in range(7):
     idx = np.array(match)==i
     nw_theta.append(np.mean(video_watching_SDI_theta[:, idx], axis=1))
@@ -85,8 +85,8 @@ rho = [
 p = []
 for i in range(7):
     data_of_interest = df.iloc[i]
-    for band1 in ['theta', 'alpha', 'low_beta', 'high_beta', 'gamma', 'wideband']:
-        for band2 in ['theta', 'alpha', 'low_beta', 'high_beta', 'gamma', 'wideband']:
+    for band1 in ['theta', 'alpha', 'low_beta', 'high_beta', 'gamma']:
+        for band2 in ['theta', 'alpha', 'low_beta', 'high_beta', 'gamma']:
             if band1 != band2:
                 
                 stats, p_value = spearmanr(data_of_interest[band1], data_of_interest[band2])
@@ -97,6 +97,10 @@ for i in range(7):
                 rho.append(stats)
                 p.append(p_value)
 
-        band_labels = [r'$\theta$', r'$\alpha$', r'low_$\beta$', r'high_$\beta$', r'$\gamma$','wideband']
+        band_labels = [r'$\theta$', r'$\alpha$', r'low_$\beta$', r'high_$\beta$', r'$\gamma$']
         sns.heatmap(significance_df.astype(float), cmap='inferno', annot=True, fmt=".1f", xticklabels=band_labels, yticklabels=band_labels)
         plt.show()
+
+# %%
+np.mean(rho)
+# %%

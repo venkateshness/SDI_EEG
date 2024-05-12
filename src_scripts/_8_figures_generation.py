@@ -116,17 +116,17 @@ fig.savefig(f'{HOMEDIR}/Generated_data/Results/Figure_1/PSD_plot.svg', bbox_inch
 ###################################################################
 #######Averaged cortical activity / Panel a)#######################
 ###################################################################
-video_activity = list(np.load(f"{HOMEDIR}/Generated_data/video1/cortical_surface_related/wideband_bandpassed.npz").values())
-resting_state = list(np.load(f"{HOMEDIR}/Generated_data/rest/cortical_surface_related/wideband_bandpassed.npz").values())
+video_activity = list(np.load(f"{HOMEDIR}/Generated_data/video1/cortical_surface_related/parcellated_widerband.npz").values())
+resting_state = list(np.load(f"{HOMEDIR}/Generated_data/rest/cortical_surface_related/parcellated_widerband.npz").values())
 
 def plot_activity(activity, video=True):
     activity_avged = np.mean(activity, axis=(0, 2))
     nifti= signals_to_img_labels(activity_avged, path_Glasser, mnitemp["mask"])
 
     if video:
-        np.savez_compressed(f"{HOMEDIR}/Results/Figure_2/activity_avged_video.npz", activity_avged_video=activity_avged)
+        np.savez_compressed(f"{HOMEDIR}/Generated_data/Data_for_plots/activity_avged_video.npz", activity_avged_video=activity_avged)
     else:
-        np.savez_compressed(f"{HOMEDIR}/Results/Figure_2/activity_avged_rest.npz", activity_avged_rest=activity_avged)
+        np.savez_compressed(f"{HOMEDIR}/Generated_data/Data_for_plots/activity_avged_rest.npz", activity_avged_rest=activity_avged)
     # _7_SDI_spatial_maps.customized_plotting_img_on_surf(stat_map=nifti, vmin=np.min(activity_avged), vmax=np.max(activity_avged), views=["lateral"], hemispheres=["left", "right"], symmetric_cbar=False, colorbar=False, cmap="inferno", output_file=f'{HOMEDIR}/Generated_data/Results/Figure_2/activity_video.svg')
 
 plot_activity(video_activity, video=True)
@@ -136,8 +136,6 @@ plot_activity(resting_state, video=False)
 #################################################################
 #######Averaged Spectrum / Panel b)##############################
 #################################################################
-video_activity = list(np.load(f"{HOMEDIR}/Generated_data/video1/cortical_surface_related/wideband_bandpassed.npz").values())
-resting_state = list(np.load(f"{HOMEDIR}/Generated_data/rest/cortical_surface_related/wideband_bandpassed.npz").values())
 
 def gpsd_avg_bundle(activity):
     gpsd_avg_bundle = list()
@@ -155,10 +153,10 @@ def gpsd_avg_bundle(activity):
     critical_freq = utility_functions.split_gpsd(np.mean(gpsd_avg_bundle, axis=0), eigvals)
     return critical_freq, gpsd_avg_bundle
 
-envelope_signal_bandpassed = list(np.load(f"{HOMEDIR}/Generated_data/rest/cortical_surface_related/wideband_bandpassed.npz").values())
+envelope_signal_bandpassed = list(np.load(f"{HOMEDIR}/Generated_data/rest/cortical_surface_related/parcellated_widerband.npz").values())
 rest_normed = (envelope_signal_bandpassed - np.mean(envelope_signal_bandpassed, axis=2)[:,:, np.newaxis])/np.std(envelope_signal_bandpassed, axis=2)[:,:, np.newaxis]
 
-envelope_signal_bandpassed = list(np.load(f"{HOMEDIR}/Generated_data/video1/cortical_surface_related/wideband_bandpassed.npz").values())
+envelope_signal_bandpassed = list(np.load(f"{HOMEDIR}/Generated_data/video1/cortical_surface_related/parcellated_widerband.npz").values())
 video_normed = (envelope_signal_bandpassed - np.mean(envelope_signal_bandpassed, axis=2)[:,:, np.newaxis])/np.std(envelope_signal_bandpassed, axis=2)[:,:, np.newaxis]
 
 _, gpsd_avg_bundle_movie = gpsd_avg_bundle(video_normed)
@@ -175,7 +173,7 @@ plt.legend()
 plt.grid(False, which='major', linestyle='--', linewidth=0.5)
 
 plt.tight_layout()
-# fig.savefig(f'{HOMEDIR}/Results/Figure_2/PSD_plot.svg', bbox_inches='tight')
+fig.savefig(f'{HOMEDIR}/Results/Figure_2/PSD_plot.svg', bbox_inches='tight')
 #%%
 
 
@@ -188,9 +186,10 @@ plt.tight_layout()
 ########################
 
 
-grouplevel_SDI_video1=_6_SDI_statistics.stats_full_test(bands=['theta', 'alpha', 'low_beta', 'high_beta', 'gamma', 'wideband'], condition='video1')
-grouplevel_SDI_rest=_6_SDI_statistics.stats_full_test(bands=['theta', 'alpha', 'low_beta', 'high_beta', 'gamma', 'wideband'], condition='rest')
-grouplevel_SDI_video2=_6_SDI_statistics.stats_full_test(bands=['theta', 'alpha', 'low_beta', 'high_beta', 'gamma', 'wideband'], condition='video2')
+grouplevel_SDI_video1=_6_SDI_statistics.stats_full_test(bands=['theta', 'alpha', 'low_beta', 'high_beta', 'gamma', 'wideband', 'widerband'], condition='video1')
+grouplevel_SDI_rest=_6_SDI_statistics.stats_full_test(bands=['theta', 'alpha', 'low_beta', 'high_beta', 'gamma', 'wideband', 'widerband'], condition='rest')
+grouplevel_SDI_video2=_6_SDI_statistics.stats_full_test(bands=['theta', 'alpha', 'low_beta', 'high_beta', 'gamma', 'wideband', 'widerband'], condition='video2')
+
 
 np.savez_compressed(f"{HOMEDIR}/Generated_data/Data_for_plots/grouplevel_SDI_video1.npz", **grouplevel_SDI_video1)
 np.savez_compressed(f"{HOMEDIR}/Generated_data/Data_for_plots/grouplevel_SDI_rest.npz", **grouplevel_SDI_rest)
@@ -204,7 +203,7 @@ np.savez_compressed(f"{HOMEDIR}/Generated_data/Data_for_plots/grouplevel_SDI_vid
 ########################
 SDI_corrected_movie_vs_rest_all_band = dict()
 
-for band in ['theta', 'alpha', 'low_beta', 'high_beta', 'gamma', 'wideband']:
+for band in [ 'widerband']:#'theta', 'alpha', 'low_beta', 'high_beta', 'gamma', 'wideband',
     video_watching_SDI=np.log2(np.load(f"{HOMEDIR}/Generated_data/video1/Graph_SDI_related/empirical_SDI.npz")[f'{band}'])
     rs_SDI = np.log2(np.load(f"{HOMEDIR}/Generated_data/rest/Graph_SDI_related/empirical_SDI.npz")[f'{band}'])
 
@@ -219,14 +218,13 @@ for band in ['theta', 'alpha', 'low_beta', 'high_beta', 'gamma', 'wideband']:
     #Corrected
     pvals_corrected = np.array(smt.fdrcorrection(pvals, alpha=0.05))
     SDI_corrected_movie_vs_rest = pvals_corrected[0]*tvals
-    
     nifti= signals_to_img_labels(SDI_corrected_movie_vs_rest, path_Glasser, mnitemp["mask"])
     # plotting.plot_glass_brain(nifti, cmap='seismic', symmetric_cbar=True, vmin=-5, vmax=5, colorbar=True)
     _7_SDI_spatial_maps.customized_plotting_img_on_surf(stat_map=nifti, threshold=1e-20, vmin = np.min(SDI_corrected_movie_vs_rest), vmax = -np.min(SDI_corrected_movie_vs_rest), cmap='cold_hot', views=["lateral", "medial"], hemispheres=["left", "right"], colorbar=False)
     
     plt.show()
     SDI_corrected_movie_vs_rest_all_band[f'{band}'] = SDI_corrected_movie_vs_rest
-# np.savez_compressed(f"{HOMEDIR}/Generated_data/Data_for_plots/SDI_corrected_movie_vs_rest_{band}_consensus.npz", **SDI_corrected_movie_vs_rest_all_band)
+# np.savez_compressed(f"{HOMEDIR}/Generated_data/Data_for_plots/SDI_corrected_movie_vs_rest_{band}.npz", **SDI_corrected_movie_vs_rest_all_band)
 
 # %%
 ########################
@@ -250,7 +248,7 @@ np.savez_compressed(f"{HOMEDIR}/Generated_data/Data_for_plots/grouplevel_SDI_res
 ################################################
 
 
-for band in ['wideband']:
+for band in ['widerband']:
     video_watching_SDI=np.log2(np.load(f"{HOMEDIR}/Generated_data/video2/Graph_SDI_related/empirical_SDI.npz")[f'{band}'])
     rs_SDI = np.log2(np.load(f"{HOMEDIR}/Generated_data/rest/Graph_SDI_related/empirical_SDI.npz")[f'{band}'])
 
@@ -268,9 +266,9 @@ for band in ['wideband']:
     SDI_corrected_anvideo_vs_rest = pvals_corrected[0]*tvals
     nifti= signals_to_img_labels(SDI_corrected_anvideo_vs_rest, path_Glasser, mnitemp["mask"])
     # nifti.to_filename(f"{HOMEDIR}/Generated_data/movie/Graph_SDI_related/empirical_SDI_{band}.nii.gz")
-    # _7_SDI_spatial_maps.customized_plotting_img_on_surf(stat_map=nifti, threshold=1e-20,   views=["lateral", "medial"], hemispheres=["left", "right"], colorbar=False,cmap="seismic", vmin=np.min(signal_for_corrected_anvideo), vmax=np.max(signal_for_corrected_anvideo), title=f'corrected / RS vs Video / tmap / p<0.05',symmetric_cbar=False)
+    _7_SDI_spatial_maps.customized_plotting_img_on_surf(stat_map=nifti, threshold=1e-20, vmin = np.min(SDI_corrected_anvideo_vs_rest), vmax = -np.min(SDI_corrected_anvideo_vs_rest), cmap='cold_hot', views=["lateral", "medial"], hemispheres=["left", "right"], colorbar=False)
     # plt.show()
-    np.savez_compressed(f"{HOMEDIR}/Generated_data/Data_for_plots/SDI_corrected_anvideo_vs_rest_{band}.npz", SDI_corrected_anvideo_vs_rest=SDI_corrected_anvideo_vs_rest)
+    np.savez_compressed(f"{HOMEDIR}/Generated_data/Data_for_plots/SDI_corrected_anvideo_vs_rest_{band}.npz", widerband=SDI_corrected_anvideo_vs_rest)
 
 
 #%%
@@ -291,9 +289,9 @@ plt.rcParams.update({
 
 
 # Loop through bands
-for band in ['theta', 'wideband']:
+for band in ['theta', 'widerband']:
     # Load data (replace with your actual data path)
-    corrca_ts = np.load(f"{HOMEDIR}/Generated_data/video1/cortical_surface_related/CorrCA_ISC_ts.npz")[band]
+    corrca_ts = np.load(f"{HOMEDIR}/Generated_data/video1/cortical_surface_related/ISC_bundle.npz")[band]
 
     # Create a new figure
     plt.figure(figsize=(8, 6))
@@ -302,8 +300,8 @@ for band in ['theta', 'wideband']:
     plt.plot(corrca_ts[0], linewidth=2.5, color='blue')  # Replace 'Your Label' with an appropriate label
 
     # Add vertical lines
-    max_index = np.argmax(corrca_ts[0, 1:]) + 1
-    min_index = np.argmin(corrca_ts[0, 1:]) + 1
+    max_index = np.argmax(corrca_ts[0, 1:165]) + 1
+    min_index = np.argmin(corrca_ts[0, 1:165]) + 1
 
     plt.axvline(max_index, color='black', linestyle='--', label=f'Strong ISC', linewidth=2)
     plt.axvline(min_index, color='teal', linestyle='--', label=f'Weak ISC', linewidth=2)
@@ -319,4 +317,30 @@ for band in ['theta', 'wideband']:
     plt.savefig(f"{HOMEDIR}/Results/Figure_7/SDI_strongest_ISC_{band}.svg", dpi=300)  
     plt.show()  # Show the figure
 #%%
-# structural graph checks
+
+import pandas as pd
+df = pd.read_excel('/users/local/Venkatesh/structure-function-eeg/src_data/Glasser_2016_Table.xlsx', header =1)
+area_description = df.columns[2]
+area_description_data = df[area_description]
+area_description_data_concat = np.concatenate([area_description_data.values] * 2, axis=0)
+
+#%%
+condition="video1"
+empi_SDI = np.log2(np.squeeze(np.load(HOMEDIR + f"Generated_data/{condition}/Graph_SDI_related/empirical_SDI.npz")[f'widerband']))
+signal = np.mean(empi_SDI, axis=0)
+
+
+def sort_index(lst, rev=True):
+    index = range(len(lst))
+    s = sorted(index, reverse=rev, key=lambda i: lst[i])
+
+
+    return s
+
+returned_indices = sort_index(signal)
+
+#%%
+
+sorted(zip(signal, area_description_data_concat), reverse=True)[:3]
+
+# %%

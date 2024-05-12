@@ -250,7 +250,7 @@ for id in range(len(subjects)):
     eloreta_activation = source_locating(the_epoch, inverse_operator)
 
 
-    parcellated[id] = averaging_by_parcellation(eloreta_activation[0])
+    parcellated[subjects[id]] = averaging_by_parcellation(eloreta_activation[0])
 
     print('Done with subject', id)
     del raw, the_epoch, data_video, events_list, sliced_epoch, info_d, eloreta_activation, inverse_operator
@@ -258,9 +258,9 @@ for id in range(len(subjects)):
 """Now that the source localization has been performed and is in the fsaverage native space of having 20k vertices,
 it is time to apply Glasser et al. 2016 parcellation on top"""
 
-np.savez_compressed(f"{HOMEDIR}/Generated_data/video2/cortical_surface_related/parcellated_widerband", parcellated=list(parcellated.values()))
+np.savez_compressed(f"{HOMEDIR}/Generated_data/video2/cortical_surface_related/parcellated_widerband.npz", **parcellated)
 
-video_watching_bundle_STC = list(parcellated.values())
+video_watching_bundle_STC = parcellated
 
 def butter_bandpass(lowcut, highcut, fs, order=5):
     nyq = 0.5 * fs
@@ -281,24 +281,17 @@ band_ranges = {
     'high_beta': (20, 30),
     'gamma': (30, 40),
     'theta': (4, 8),
+    'wideband': (4, 40)
 }
 
-# Create a dictionary to store band data for each subject
 bands = {}
 
-# Apply bandpass filter and store for each band and each subject
 for band, (low, high) in band_ranges.items():
     band_data = {}
-    for id, data in enumerate(video_watching_bundle_STC):
+    for sub_id, data in video_watching_bundle_STC.items():
         bandpassed = butter_bandpass_filter(data, lowcut=low, highcut=high, fs=125)
         hilberted = hilbert(bandpassed, N=None, axis=-1)
-        band_data[f'{subjects[id]}'] = np.abs(hilberted)
+        band_data[f'{sub_id}'] = np.abs(hilberted)
     
     bands[band] = band_data
     np.savez_compressed(f'{HOMEDIR}/Generated_data/video2/cortical_surface_related/{band}_bandpassed', **band_data)
-
-wideband_data = {}
-for id in range(len(video_watching_bundle_STC)):
-    wideband_data[f'{subjects[id]}'] = np.sum([band_data[f'{subjects[id]}'] for band_data in bands.values()], axis=0)
-np.savez_compressed(f'{HOMEDIR}/Generated_data/video2/cortical_surface_related/wideband_bandpassed', **wideband_data)
-

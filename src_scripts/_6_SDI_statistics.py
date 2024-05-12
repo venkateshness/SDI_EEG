@@ -44,7 +44,7 @@ def stats_full_test(bands, condition):
         empi_sig[np.where(empi_sig==0)] = 1
 
         SDI_final = np.log2(empi_sig)
-        SDI_anvideo.append(SDI_final)
+        # SDI_anvideo.append(SDI_final)
 
         # SDI_final[SDI_final<-1] = -1
         # SDI_final[SDI_final>1] = 1
@@ -55,6 +55,8 @@ def stats_full_test(bands, condition):
         
         nifti = signals_to_img_labels(SDI_final, path_Glasser, mnitemp["mask"])
         if band == 'wideband':
+            nifti.to_filename(f"{HOMEDIR}/Generated_data/{condition}/Graph_SDI_related/SDI_{band}_{condition}.nii.gz")
+        if band == 'widerband':
             nifti.to_filename(f"{HOMEDIR}/Generated_data/{condition}/Graph_SDI_related/SDI_{band}_{condition}.nii.gz")
         
         # _7_SDI_spatial_maps.customized_plotting_img_on_surf(stat_map=nifti, threshold=1e-20, vmin=-1, vmax=1, cmap='cold_hot', views=["lateral", "medial"], hemispheres=["left", "right"], colorbar=False)

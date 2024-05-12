@@ -17,9 +17,13 @@ def SDI(graph, condition):
     empirical_SDI_bundle = dict()
     surrogate_SDI_bundle = dict()
 
-    for band in ['theta', 'alpha', 'low_beta', 'high_beta', 'gamma', 'wideband']:
-    
-        envelope_signal_bandpassed = np.load(f"{HOMEDIR}/Generated_data/{condition}/cortical_surface_related/{band}_bandpassed.npz")
+    for band in ['theta', 'alpha', 'low_beta', 'high_beta', 'gamma', 'wideband', 'widerband']:
+        
+        if not band == 'widerband':
+            envelope_signal_bandpassed = np.load(f"{HOMEDIR}/Generated_data/{condition}/cortical_surface_related/{band}_bandpassed.npz")
+        else:
+            envelope_signal_bandpassed = np.load(f"{HOMEDIR}/Generated_data/{condition}/cortical_surface_related/parcellated_widerband.npz")
+            
         s_bundle = list()
         e_bundle = list()
 

@@ -1,6 +1,12 @@
-## Title to come
+## Structure-function coupling and decoupling during movie-watching and resting-state: Novel insights bridging EEG and structural imaging
+
 Briefly, this work contributes to understanding more about the relationship of the continuous EEG (Movie and Rest) on the underlying structure. 
 
+Preprint: http://biorxiv.org/content/10.1101/2024.04.05.588337v1
+
+In what follows, the overall structure of the code, and the data is described to be able to reproduce the results
+
+Project is organized as follows:
 ```
 └── structure-function-eeg/ 
     ├── Generated_data  / 
@@ -35,7 +41,7 @@ Briefly, this work contributes to understanding more about the relationship of t
     └── requirements.txt
 ```
 
-This repo contains all the code-related files from `src_scripts`. `src_data` and `Generated_data` can be found in https://osf.io/rjuap/. `src_data` contains the source/raw data necessary for the analysis. `Generated_data` are the intermediate data generated during analysis, and are used for subsequent steps.
+`Generated_data` and `src_data` can be found in https://osf.io/rjuap/. `Generated_data` are the intermediate data generated as part of the analysis. They are organized into first video, resting-state, and the second video. Each of them contains preprocessed scalp-level EEG (`preprocessed_dataset/`), source-localized EEG (`cortical_surface_related/`), and SDI-related (see the paper for more). `src_data` contains the data necessary for the analysis. More details about these folders are described in the OSF repo.
 
 ## Dataset Downloader
 We analyse subset of the data acquired by Healthy Brain Network (HBN). `_2_Downloading_from_AWS.sh` downloads the data necessary. Run them as `sh _2_Downloading_from_AWS.sh <sub_list>`. The `<sub_list>` can be obtained by running `_1_parsing_for_subjects.py`.

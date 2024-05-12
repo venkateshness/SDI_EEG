@@ -38,7 +38,10 @@ def SDI_strongest_ISC(onset, band, n_surrogates=19):
     data_for_weak_and_strong = dict()
     labels = ['strong', 'weak']
     for idx, weak_and_strong in enumerate(onset):
-        envelope_signal_bandpassed = np.load(f"{HOMEDIR}/Generated_data/video1/cortical_surface_related/{band}_bandpassed.npz")
+        if band=='theta':
+            envelope_signal_bandpassed = np.load(f"{HOMEDIR}/Generated_data/video1/cortical_surface_related/{band}_bandpassed.npz")
+        elif band=='widerband':
+            envelope_signal_bandpassed = np.load(f"{HOMEDIR}/Generated_data/video1/cortical_surface_related/parcellated_widerband.npz")
         
 
         # surrogate SDI
@@ -95,8 +98,8 @@ def SDI_strongest_ISC(onset, band, n_surrogates=19):
         
         empi_sig[np.where(empi_sig==0)] = 1
         SDI_final = np.log2(empi_sig)
-        SDI_final[SDI_final<-1] = -1
-        SDI_final[SDI_final>1] = 1
+        # SDI_final[SDI_final<-1] = -1
+        # SDI_final[SDI_final>1] = 1
         data_for_weak_and_strong[f'{labels[idx]}'] = SDI_final
         
         mnitemp = fetch_icbm152_2009()
@@ -108,13 +111,13 @@ def SDI_strongest_ISC(onset, band, n_surrogates=19):
     return data_for_weak_and_strong
 
 corrca_ts_band_strong =np.load(f"{HOMEDIR}/Generated_data/video1/cortical_surface_related/ISC_bundle.npz")['theta']
-data_for_theta = SDI_strongest_ISC([np.argmin(corrca_ts_band_strong[0, 1:]), np.argmax(corrca_ts_band_strong[0, 1:])] , 'theta')
+data_for_theta = SDI_strongest_ISC([np.argmin(corrca_ts_band_strong[0, 5:165]), np.argmax(corrca_ts_band_strong[0, 5:165])] , 'theta')
 
-corrca_ts_band_weak =np.load(f"{HOMEDIR}/Generated_data/video1/cortical_surface_related/ISC_bundle.npz")['wideband']
-data_for_wideband = SDI_strongest_ISC([np.argmin(corrca_ts_band_weak[0, 1:]), np.argmax(corrca_ts_band_weak[0, 1:])] , 'wideband')
+corrca_ts_band_weak =np.load(f"{HOMEDIR}/Generated_data/video1/cortical_surface_related/ISC_bundle.npz")['widerband']
+data_for_wideband = SDI_strongest_ISC([np.argmin(corrca_ts_band_weak[0, 5:165]), np.argmax(corrca_ts_band_weak[0, 5:165])] , 'widerband')
 
 np.savez_compressed(f'{HOMEDIR}/Generated_data/Data_for_plots/SDI_strong_weak_ISC_theta.npz', **data_for_theta)
-np.savez_compressed(f'{HOMEDIR}/Generated_data/Data_for_plots/SDI_strong_weak_ISC_wideband.npz', **data_for_wideband)
+np.savez_compressed(f'{HOMEDIR}/Generated_data/Data_for_plots/SDI_strong_weak_ISC_widerband.npz', **data_for_wideband)
 
 
 # %%
@@ -123,7 +126,10 @@ np.savez_compressed(f'{HOMEDIR}/Generated_data/Data_for_plots/SDI_strong_weak_IS
 ##################Strong ISC vs Weak ISC SDI comparison##################
 ########################################################################
 def SDI_in_seconds(band):
-    envelope_bandpassed = np.load(f"{HOMEDIR}/Generated_data/video1/cortical_surface_related/{band}_bandpassed.npz")
+    if band=='theta':
+        envelope_bandpassed = np.load(f"{HOMEDIR}/Generated_data/video1/cortical_surface_related/{band}_bandpassed.npz")
+    elif band=='widerband':
+        envelope_bandpassed = np.load(f"{HOMEDIR}/Generated_data/video1/cortical_surface_related/parcellated_widerband.npz")
     
     lf_bundle = list()
     hf_bundle = list()
@@ -140,7 +146,7 @@ def SDI_in_seconds(band):
     return lf_bundle, hf_bundle
 
 
-for band in ['theta', 'alpha', 'low_beta', 'high_beta', 'gamma', 'wideband']:
+for band in ['theta', 'widerband']:
     corrca_ts = np.load(f"{HOMEDIR}/Generated_data/video1/cortical_surface_related/ISC_bundle.npz")[f'{band}']
 
     lf_b, hf_b = SDI_in_seconds(f'{band}')
@@ -153,8 +159,8 @@ for band in ['theta', 'alpha', 'low_beta', 'high_beta', 'gamma', 'wideband']:
 
     SDI_seconds = np.log2(hf_b_normed/lf_b_normed)
 
-    strong_time =np.random.randint(5, 165)
-    weak_time = np.random.randint(5, 165)
+    strong_time = np.argmax(corrca_ts_band_strong[0, 5:165]) #np.random.randint(5, 165)
+    weak_time = np.argmin(corrca_ts_band_strong[0, 5:165]) #np.random.randint(5, 165)
 
     strong_ISC = SDI_seconds[:, :, strong_time]
     weak_ISC = SDI_seconds[:, :, weak_time]
@@ -168,4 +174,5 @@ for band in ['theta', 'alpha', 'low_beta', 'high_beta', 'gamma', 'wideband']:
     nifti = signals_to_img_labels(signal_to_plot, path_Glasser, mnitemp["mask"])
     _7_SDI_spatial_maps.customized_plotting_img_on_surf(stat_map=nifti, threshold=1e-20, cmap='cold_hot', views=["lateral", "medial"], hemispheres=["left", "right"], colorbar=False)
     plt.show()
+
 
