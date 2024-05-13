@@ -41,7 +41,7 @@ Project is organized as follows:
     └── requirements.txt
 ```
 
-`Generated_data` and `src_data` can be found in https://osf.io/rjuap/. `Generated_data` are the intermediate data generated as part of the analysis. They are organized into first video, resting-state, and the second video. Each of them contains preprocessed scalp-level EEG (`preprocessed_dataset/`), source-localized EEG (`cortical_surface_related/`), and SDI-related (see the paper for more). `src_data` contains the data necessary for the analysis. More details about these folders are described in the OSF repo.
+`Generated_data` and `src_data` can be found in https://osf.io/4xsv5/. `Generated_data` are the intermediate data generated as part of the analysis. They are organized into first video, resting-state, and the second video. Each of them contains preprocessed scalp-level EEG (`preprocessed_dataset/`), source-localized EEG (`cortical_surface_related/`), and SDI-related (see the paper for more). `src_data` contains the data necessary for the analysis. More details about these folders are described in the OSF repo.
 
 ## Dataset Downloader
 We analyse subset of the data acquired by Healthy Brain Network (HBN). `_2_Downloading_from_AWS.sh` downloads the data necessary. Run them as `sh _2_Downloading_from_AWS.sh <sub_list>`. The `<sub_list>` can be obtained by running `_1_parsing_for_subjects.py`.
