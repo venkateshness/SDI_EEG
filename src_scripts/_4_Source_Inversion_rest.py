@@ -87,11 +87,11 @@ def noise_covariance(subject):
     """
     raw_resting_state, events_resting_state = (
         mne.io.read_raw_fif(
-            f"{HOMEDIR}/Generated_data/rest/preprocessed_dataset/{subject}/raw.fif",
+            f"{HOMEDIR}/Generated_data_revision/rest/preprocessed_dataset/{subject}/raw.fif",
             verbose=False,
         ),
         np.load(
-            f"{HOMEDIR}/Generated_data/rest/preprocessed_dataset/{subject}/events.npz"
+            f"{HOMEDIR}/Generated_data_revision/rest/preprocessed_dataset/{subject}/events.npz"
         )["resting_state_events"],
     )
 
@@ -180,7 +180,7 @@ trans = "fsaverage"
 source_space = op.join(fs_dir, "bem", "fsaverage-ico-5-src.fif")
 bem = op.join(fs_dir, "bem", "fsaverage-5120-5120-5120-bem-sol.fif")
 
-subjects = sorted(list(os.listdir(f'{HOMEDIR}/Generated_data/rest/preprocessed_dataset/')))
+subjects = sorted(list(os.listdir(f'{HOMEDIR}/Generated_data_revision/rest/preprocessed_dataset/')))
 
 n_chans_after_preprocessing = 91
 time_in_samples = 20*fs
@@ -196,11 +196,11 @@ for id in range(len(subjects)):
 
     data_rest, events_list = (
         mne.io.read_raw_fif(
-            f"{HOMEDIR}/Generated_data/rest/preprocessed_dataset/{subjects[id]}/raw.fif",
+            f"{HOMEDIR}/Generated_data_revision/rest/preprocessed_dataset/{subjects[id]}/raw.fif",
             verbose=False,
         ),
         np.load(
-            f"{HOMEDIR}/Generated_data/rest/preprocessed_dataset/{subjects[id]}/events.npz"
+            f"{HOMEDIR}/Generated_data_revision/rest/preprocessed_dataset/{subjects[id]}/events.npz"
         )["resting_state_events"],
     )
 
@@ -256,7 +256,7 @@ for id in range(len(subjects)):
 """Now that the source localization has been performed and is in the fsaverage native space of having 20k vertices,
 it is time to apply Glasser et al. 2016 parcellation on top"""
 
-np.savez_compressed(f"{HOMEDIR}/Generated_data/rest/cortical_surface_related/parcellated_widerband.npz", **parcellated)
+np.savez_compressed(f"{HOMEDIR}/Generated_data_revision/rest/cortical_surface_related/parcellated_widerband.npz", **parcellated)
 
 video_watching_bundle_STC = parcellated
 
@@ -294,7 +294,7 @@ for band, (low, high) in band_ranges.items():
         band_data[f'{sub_id}'] = np.abs(hilberted)
     
     bands[band] = band_data
-    np.savez_compressed(f'{HOMEDIR}/Generated_data/rest/cortical_surface_related/{band}_bandpassed', **band_data)
+    np.savez_compressed(f'{HOMEDIR}/Generated_data_revision/rest/cortical_surface_related/{band}_bandpassed', **band_data)
 
 
 # %%

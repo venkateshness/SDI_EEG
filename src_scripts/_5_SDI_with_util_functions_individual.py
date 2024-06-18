@@ -20,6 +20,7 @@ def SDI(graph, condition):
     for band in ['theta', 'alpha', 'low_beta', 'high_beta', 'gamma', 'wideband', 'widerband']:
         
         if not band == 'widerband':
+            
             envelope_signal_bandpassed = np.load(f"{HOMEDIR}/Generated_data/{condition}/cortical_surface_related/{band}_bandpassed.npz")
         else:
             envelope_signal_bandpassed = np.load(f"{HOMEDIR}/Generated_data/{condition}/cortical_surface_related/parcellated_widerband.npz")
@@ -49,8 +50,8 @@ def SDI(graph, condition):
         empirical_SDI_bundle[f'{band}'] = e_bundle
         surrogate_SDI_bundle[f'{band}']= np.swapaxes(s_bundle, 0, 1)
     
-    np.savez_compressed(f"{HOMEDIR}/Generated_data/{condition}/Graph_SDI_related/empirical_SDI.npz", **empirical_SDI_bundle)
-    np.savez_compressed(f"{HOMEDIR}/Generated_data/{condition}/Graph_SDI_related/surrogate_SDI.npz", **surrogate_SDI_bundle)
+    np.savez_compressed(f"{HOMEDIR}/Generated_data_revision/{condition}/Graph_SDI_related/empirical_SDI.npz", **empirical_SDI_bundle)
+    np.savez_compressed(f"{HOMEDIR}/Generated_data_revision/{condition}/Graph_SDI_related/surrogate_SDI.npz", **surrogate_SDI_bundle)
 #%%
 #movie
 graph  = np.load(f"{HOMEDIR}/src_data/individual_graphs.npz")
