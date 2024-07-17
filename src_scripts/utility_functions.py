@@ -27,7 +27,6 @@ def eigmodes(W):
         degree, np.matmul(W, degree)
     )
     [eigvals, eigevecs] = la.eigh(laplacian)
-    
     return laplacian, eigvals, eigevecs
 
 
@@ -76,16 +75,15 @@ def compute_gpsd(signal,eigenvecs):
 
 def split_gpsd(gpsd,eigenvals):
 
-    halfpower = np.trapz(x=eigenvals[1:],y=gpsd[1:]) / 2
+    halfpower = np.trapz(x=eigenvals,y=gpsd) / 2
     
     sum_of_freqs = 0
     i = 0
-    
     while sum_of_freqs < halfpower:
-        sum_of_freqs = np.trapz(x=eigenvals[1:][:i],y=gpsd[1:][:i])
+        sum_of_freqs = np.trapz(x=eigenvals[:i],y=gpsd[:i])
         i += 1
     
-    critical_freq = i - 2
+    critical_freq = i - 1
     return critical_freq
         
 subjects = 1
@@ -99,7 +97,6 @@ def fullpipeline(envelope, eigevecs, eigvals, is_surrogate=False, in_seconds=Fal
 
     psd_power_avg, psd_power = compute_gpsd(signal_for_gft, eigevecs)
     critical_freq = split_gpsd(psd_power_avg, eigvals)
-    
     low_freq =  np.zeros((regions, regions))
     low_freq[:,:critical_freq] = np.array(eigevecs)[ :, :critical_freq]
 

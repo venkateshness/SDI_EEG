@@ -186,14 +186,14 @@ fig.savefig(f'{HOMEDIR}/Results/Figure_2/PSD_plot.svg', bbox_inches='tight')
 ########################
 
 
-grouplevel_SDI_video1=_6_SDI_statistics.stats_full_test(bands=['theta', 'alpha', 'low_beta', 'high_beta', 'gamma', 'wideband', 'widerband'], condition='video1')
-grouplevel_SDI_rest=_6_SDI_statistics.stats_full_test(bands=['theta', 'alpha', 'low_beta', 'high_beta', 'gamma', 'wideband', 'widerband'], condition='rest')
-grouplevel_SDI_video2=_6_SDI_statistics.stats_full_test(bands=['theta', 'alpha', 'low_beta', 'high_beta', 'gamma', 'wideband', 'widerband'], condition='video2')
+grouplevel_SDI_video1=_6_SDI_statistics.stats_full_test(bands=['theta', 'alpha', 'low_beta', 'high_beta', 'gamma',  'widerband'], condition='video1')
+# grouplevel_SDI_rest=_6_SDI_statistics.stats_full_test(bands=['theta', 'alpha', 'low_beta', 'high_beta', 'gamma',  'widerband'], condition='rest')
+# grouplevel_SDI_video2=_6_SDI_statistics.stats_full_test(bands=['theta', 'alpha', 'low_beta', 'high_beta', 'gamma', 'widerband'], condition='video2')
 
 
-np.savez_compressed(f"{HOMEDIR}/Generated_data/Data_for_plots/grouplevel_SDI_video1.npz", **grouplevel_SDI_video1)
-np.savez_compressed(f"{HOMEDIR}/Generated_data/Data_for_plots/grouplevel_SDI_rest.npz", **grouplevel_SDI_rest)
-np.savez_compressed(f"{HOMEDIR}/Generated_data/Data_for_plots/grouplevel_SDI_video2.npz", **grouplevel_SDI_video2)
+# np.savez_compressed(f"{HOMEDIR}/Generated_data/Data_for_plots/grouplevel_SDI_video1.npz", **grouplevel_SDI_video1)
+# np.savez_compressed(f"{HOMEDIR}/Generated_data/Data_for_plots/grouplevel_SDI_rest.npz", **grouplevel_SDI_rest)
+# np.savez_compressed(f"{HOMEDIR}/Generated_data/Data_for_plots/grouplevel_SDI_video2.npz", **grouplevel_SDI_video2)
 
 #%%
 
@@ -203,9 +203,9 @@ np.savez_compressed(f"{HOMEDIR}/Generated_data/Data_for_plots/grouplevel_SDI_vid
 ########################
 SDI_corrected_movie_vs_rest_all_band = dict()
 
-for band in [ 'widerband']:#'theta', 'alpha', 'low_beta', 'high_beta', 'gamma', 'wideband',
-    video_watching_SDI=np.log2(np.load(f"{HOMEDIR}/Generated_data/video1/Graph_SDI_related/empirical_SDI.npz")[f'{band}'])
-    rs_SDI = np.log2(np.load(f"{HOMEDIR}/Generated_data/rest/Graph_SDI_related/empirical_SDI.npz")[f'{band}'])
+for band in [ 'theta', 'alpha', 'low_beta', 'high_beta', 'gamma', 'widerband']:#'theta', 'alpha', 'low_beta', 'high_beta', 'gamma', 'wideband',
+    video_watching_SDI=np.log2(np.load(f"{HOMEDIR}/revision/Generated_data_revision/video1/Graph_SDI_related_no_envelope_signal/empirical_SDI.npz")[f'{band}'])
+    rs_SDI = np.log2(np.load(f"{HOMEDIR}/revision/Generated_data_revision/rest/Graph_SDI_related_no_envelope_signal/empirical_SDI.npz")[f'{band}'])
 
     pvals = []
     tvals = []
@@ -231,11 +231,11 @@ for band in [ 'widerband']:#'theta', 'alpha', 'low_beta', 'high_beta', 'gamma', 
 #######Video vs Rest Consensus#### 
 ########################
 
-grouplevel_SDI_video1_consensus=_6_SDI_statistics.stats_full_test(bands=['theta', 'alpha', 'low_beta', 'high_beta', 'gamma', 'wideband'], condition='movie_consensus')
-grouplevel_SDI_rest_consensus=_6_SDI_statistics.stats_full_test(bands=['theta', 'alpha', 'low_beta', 'high_beta', 'gamma', 'wideband'], condition='rest_consensus')
+# grouplevel_SDI_video1_consensus=_6_SDI_statistics.stats_full_test(bands=['theta', 'alpha', 'low_beta', 'high_beta', 'gamma', 'wideband'], condition='movie_consensus')
+# grouplevel_SDI_rest_consensus=_6_SDI_statistics.stats_full_test(bands=['theta', 'alpha', 'low_beta', 'high_beta', 'gamma', 'wideband'], condition='rest_consensus')
 
-np.savez_compressed(f"{HOMEDIR}/Generated_data/Data_for_plots/grouplevel_SDI_video1_consensus.npz", **grouplevel_SDI_video1_consensus)
-np.savez_compressed(f"{HOMEDIR}/Generated_data/Data_for_plots/grouplevel_SDI_rest_consensus.npz", **grouplevel_SDI_rest_consensus)
+# np.savez_compressed(f"{HOMEDIR}/Generated_data/Data_for_plots/grouplevel_SDI_video1_consensus.npz", **grouplevel_SDI_video1_consensus)
+# np.savez_compressed(f"{HOMEDIR}/Generated_data/Data_for_plots/grouplevel_SDI_rest_consensus.npz", **grouplevel_SDI_rest_consensus)
 
 #%%
 

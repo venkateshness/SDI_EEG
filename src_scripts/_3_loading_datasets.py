@@ -191,21 +191,21 @@ for i in range(1, len(subject_list) + 1):
     if os.path.exists(f"{HOMEDIR}/src_data/video1/{subject_list[i-1]}/") and os.path.exists(f"{HOMEDIR}/src_data/rest/{subject_list[i-1]}/"):
         
         if not os.path.exists(
-            f"{HOMEDIR}/Generated_data_revision/rest/preprocessed_dataset/{subject_list[i-1]}"
+            f"{HOMEDIR}/revision/Generated_data_revision/rest/preprocessed_dataset/{subject_list[i-1]}"
         ):
             os.makedirs(
-                f"{HOMEDIR}/Generated_data_revision/rest/preprocessed_dataset/{subject_list[i-1]}"
+                f"{HOMEDIR}/revision/Generated_data_revision/rest/preprocessed_dataset/{subject_list[i-1]}"
             )
 
         resting_state_raw, resting_state_events = preparation_resting_state(
             subject_list[i - 1], "Rest"
         )
         resting_state_raw.save(
-            f"{HOMEDIR}/Generated_data_revision/rest/preprocessed_dataset/{subject_list[i-1]}/raw.fif",
+            f"{HOMEDIR}/revision/Generated_data_revision/rest/preprocessed_dataset/{subject_list[i-1]}/raw.fif",
             overwrite=True,
         )
         np.savez_compressed(
-            f"{HOMEDIR}/Generated_data_revision/rest/preprocessed_dataset/{subject_list[i-1]}/events.npz",
+            f"{HOMEDIR}/revision/Generated_data_revision/rest/preprocessed_dataset/{subject_list[i-1]}/events.npz",
             resting_state_events=resting_state_events,
         )
 
@@ -216,19 +216,19 @@ for i in range(1, len(subject_list) + 1):
     if os.path.exists(f"{HOMEDIR}/src_data/video1/{subject_list[i-1]}/") and os.path.exists(f"{HOMEDIR}/src_data/rest/{subject_list[i-1]}/"):
 
         if not os.path.exists(
-            f"{HOMEDIR}/Generated_data_revision/video1/preprocessed_dataset/{subject_list[i-1]}"
+            f"{HOMEDIR}/revision/Generated_data_revision/video1/preprocessed_dataset/{subject_list[i-1]}"
         ):
             os.makedirs(
-                f"{HOMEDIR}/Generated_data_revision/video1/preprocessed_dataset/{subject_list[i-1]}"
+                f"{HOMEDIR}/revision/Generated_data_revision/video1/preprocessed_dataset/{subject_list[i-1]}"
             )
 
         sub_raw, sub_events = preparation(subject_list[i - 1], "video1")
         sub_raw.save(
-            f"{HOMEDIR}/Generated_data/video1/preprocessed_dataset/{subject_list[i-1]}/raw.fif",
+            f"{HOMEDIR}/revision/Generated_data_revision/video1/preprocessed_dataset/{subject_list[i-1]}/raw.fif",
             overwrite=True,
         )
         np.savez_compressed(
-            f"{HOMEDIR}/Generated_data/video1/preprocessed_dataset/{subject_list[i-1]}/events.npz",
+            f"{HOMEDIR}/revision/Generated_data_revision/video1/preprocessed_dataset/{subject_list[i-1]}/events.npz",
             video_watching_events=sub_events,
         )
 
@@ -238,19 +238,19 @@ for i in range(1, len(subject_list) + 1):
     if os.path.exists(f"{HOMEDIR}/src_data/video2/{subject_list[i-1]}/") and os.path.exists(f"{HOMEDIR}/src_data/rest/{subject_list[i-1]}/"):
 
         if not os.path.exists(
-            f"{HOMEDIR}/Generated_data/video2/preprocessed_dataset/{subject_list[i-1]}"
+            f"{HOMEDIR}/revision/Generated_data_revision/video2/preprocessed_dataset/{subject_list[i-1]}"
         ):
             os.makedirs(
-                f"{HOMEDIR}/Generated_data/video2/preprocessed_dataset/{subject_list[i-1]}"
+                f"{HOMEDIR}/revision/Generated_data_revision/video2/preprocessed_dataset/{subject_list[i-1]}"
             )
 
         sub_raw, sub_events = preparation(subject_list[i - 1], "video2")
         sub_raw.save(
-            f"{HOMEDIR}/Generated_data/video2/preprocessed_dataset/{subject_list[i-1]}/raw.fif",
+            f"{HOMEDIR}/revision/Generated_data_revision/video2/preprocessed_dataset/{subject_list[i-1]}/raw.fif",
             overwrite=True,
         )
         np.savez_compressed(
-            f"{HOMEDIR}/Generated_data/video2/preprocessed_dataset/{subject_list[i-1]}/events.npz",
+            f"{HOMEDIR}revision/Generated_data_revision/video2/preprocessed_dataset/{subject_list[i-1]}/events.npz",
             video_watching_events=sub_events,
         )
 # %%

@@ -258,7 +258,7 @@ for id in range(len(subjects)):
 """Now that the source localization has been performed and is in the fsaverage native space of having 20k vertices,
 it is time to apply Glasser et al. 2016 parcellation on top"""
 
-np.savez_compressed(f"{HOMEDIR}/Generated_data/video2/cortical_surface_related/parcellated_widerband.npz", **parcellated)
+np.savez_compressed(f"{HOMEDIR}/revision/Generated_data_revision/video2/cortical_surface_related/parcellated_widerband.npz", **parcellated)
 
 video_watching_bundle_STC = parcellated
 
@@ -290,8 +290,10 @@ for band, (low, high) in band_ranges.items():
     band_data = {}
     for sub_id, data in video_watching_bundle_STC.items():
         bandpassed = butter_bandpass_filter(data, lowcut=low, highcut=high, fs=125)
-        hilberted = hilbert(bandpassed, N=None, axis=-1)
-        band_data[f'{sub_id}'] = np.abs(hilberted)
+        
+        band_data[f'{sub_id}'] = bandpassed
     
     bands[band] = band_data
-    np.savez_compressed(f'{HOMEDIR}/Generated_data/video2/cortical_surface_related/{band}_bandpassed', **band_data)
+    np.savez_compressed(f'{HOMEDIR}/revision/Generated_data_revision/video2/cortical_surface_related/{band}_bandpassed', **band_data)
+
+# %%
