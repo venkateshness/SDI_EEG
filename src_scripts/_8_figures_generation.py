@@ -186,8 +186,8 @@ fig.savefig(f'{HOMEDIR}/Results/Figure_2/PSD_plot.svg', bbox_inches='tight')
 ########################
 
 
-grouplevel_SDI_video1=_6_SDI_statistics.stats_full_test(bands=['theta', 'alpha', 'low_beta', 'high_beta', 'gamma',  'widerband'], condition='video1')
-# grouplevel_SDI_rest=_6_SDI_statistics.stats_full_test(bands=['theta', 'alpha', 'low_beta', 'high_beta', 'gamma',  'widerband'], condition='rest')
+# grouplevel_SDI_video1=_6_SDI_statistics.stats_full_test(bands=['theta', 'alpha', 'low_beta', 'high_beta', 'gamma',  'widerband'], condition='video1')
+grouplevel_SDI_rest=_6_SDI_statistics.stats_full_test(bands=['theta', 'alpha', 'low_beta', 'high_beta', 'gamma',  'widerband'], condition='rest')
 # grouplevel_SDI_video2=_6_SDI_statistics.stats_full_test(bands=['theta', 'alpha', 'low_beta', 'high_beta', 'gamma', 'widerband'], condition='video2')
 
 

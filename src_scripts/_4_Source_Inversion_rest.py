@@ -3,7 +3,7 @@
 import mne
 import numpy as np
 
-from scipy.signal import butter, lfilter, hilbert
+from scipy.signal import butter, lfilter, hilbert, stft
 from mne.datasets import fetch_fsaverage
 from mne.minimum_norm import make_inverse_operator, apply_inverse_epochs
 import os.path as op
@@ -87,11 +87,11 @@ def noise_covariance(subject):
     """
     raw_resting_state, events_resting_state = (
         mne.io.read_raw_fif(
-            f"{HOMEDIR}/revision/Generated_data_revision/rest/preprocessed_dataset/{subject}/raw.fif",
+            f"{HOMEDIR}/Generated_data/rest/preprocessed_dataset/{subject}/raw.fif",
             verbose=False,
         ),
         np.load(
-            f"{HOMEDIR}/revision/Generated_data_revision/rest/preprocessed_dataset/{subject}/events.npz"
+            f"{HOMEDIR}/Generated_data/rest/preprocessed_dataset/{subject}/events.npz"
         )["resting_state_events"],
     )
 
@@ -180,7 +180,7 @@ trans = "fsaverage"
 source_space = op.join(fs_dir, "bem", "fsaverage-ico-5-src.fif")
 bem = op.join(fs_dir, "bem", "fsaverage-5120-5120-5120-bem-sol.fif")
 
-subjects = sorted(list(os.listdir(f'{HOMEDIR}/revision/Generated_data_revision/rest/preprocessed_dataset/')))
+subjects = sorted(list(os.listdir(f'{HOMEDIR}/Generated_data/rest/preprocessed_dataset/')))
 
 n_chans_after_preprocessing = 91
 time_in_samples = 20*fs
@@ -196,11 +196,11 @@ for id in range(len(subjects)):
 
     data_rest, events_list = (
         mne.io.read_raw_fif(
-            f"{HOMEDIR}/revision/Generated_data_revision/rest/preprocessed_dataset/{subjects[id]}/raw.fif",
+            f"{HOMEDIR}/Generated_data/rest/preprocessed_dataset/{subjects[id]}/raw.fif",
             verbose=False,
         ),
         np.load(
-            f"{HOMEDIR}/revision/Generated_data_revision/rest/preprocessed_dataset/{subjects[id]}/events.npz"
+            f"{HOMEDIR}/Generated_data/rest/preprocessed_dataset/{subjects[id]}/events.npz"
         )["resting_state_events"],
     )
 
@@ -289,8 +289,11 @@ bands = {}
 for band, (low, high) in band_ranges.items():
     band_data = {}
     for sub_id, data in video_watching_bundle_STC.items():
-        bandpassed = butter_bandpass_filter(data, lowcut=low, highcut=high, fs=125)
-        band_data[f'{sub_id}'] = bandpassed
+        frequencies, times, Zxx = stft(data, fs=fs, nperseg=25)
+        bandpassed = (frequencies >= low) & (frequencies < high)
+        
+        band_data[f'{sub_id}'] = np.mean(np.abs(Zxx)[:, bandpassed, :], axis = 1)
+    
     
     bands[band] = band_data
     np.savez_compressed(f'{HOMEDIR}/revision/Generated_data_revision/rest/cortical_surface_related/{band}_bandpassed', **band_data)

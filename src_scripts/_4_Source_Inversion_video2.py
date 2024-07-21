@@ -3,7 +3,7 @@
 import mne
 import numpy as np
 
-from scipy.signal import butter, lfilter, hilbert
+from scipy.signal import butter, lfilter, hilbert, stft
 from mne.datasets import fetch_fsaverage
 from mne.minimum_norm import make_inverse_operator, apply_inverse_epochs
 import os.path as op
@@ -289,9 +289,10 @@ bands = {}
 for band, (low, high) in band_ranges.items():
     band_data = {}
     for sub_id, data in video_watching_bundle_STC.items():
-        bandpassed = butter_bandpass_filter(data, lowcut=low, highcut=high, fs=125)
+        frequencies, times, Zxx = stft(data, fs=fs, nperseg=25)
+        bandpassed = (frequencies >= low) & (frequencies < high)
         
-        band_data[f'{sub_id}'] = bandpassed
+        band_data[f'{sub_id}'] = np.mean(np.abs(Zxx)[:, bandpassed, :], axis = 1)
     
     bands[band] = band_data
     np.savez_compressed(f'{HOMEDIR}/revision/Generated_data_revision/video2/cortical_surface_related/{band}_bandpassed', **band_data)
