@@ -1,5 +1,4 @@
 """Memory intensive jobs below; can spike up to 50GB of memory requirement"""
-#%%
 import mne
 import numpy as np
 
@@ -295,7 +294,4 @@ for band, (low, high) in band_ranges.items():
     
     bands[band] = band_data
     np.savez_compressed(f'{HOMEDIR}/Generated_data/rest/cortical_surface_related/{band}_bandpassed', **band_data)
-
-
-# %%
 

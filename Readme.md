@@ -41,7 +41,7 @@ Project is organized as follows:
     └── requirements.txt
 ```
 
-`Generated_data` and `src_data` can be found in https://osf.io/4xsv5/. `Generated_data` are the intermediate data generated as part of the analysis. They are organized into first video, resting-state, and the second video. Each of them contains preprocessed scalp-level EEG (`preprocessed_dataset/`), source-localized EEG (`cortical_surface_related/`), and SDI-related (see the paper for more). `src_data` contains the data necessary for the analysis. More details about these folders are described in the OSF repo.
+`Generated_data` and `src_data` can be found in https://osf.io/fme6x/. `Generated_data` are the intermediate data generated as part of the analysis. They are organized into first video, resting-state, and the second video. Each of them contains preprocessed scalp-level EEG (`preprocessed_dataset/`), source-localized EEG (`cortical_surface_related/`), and SDI-related (see the paper for more). `src_data` contains the data necessary for the analysis. More details about these folders are described in the OSF repo.
 
 ## Dataset Downloader
 We analyse subset of the data acquired by Healthy Brain Network (HBN). `_2_Downloading_from_AWS.sh` downloads the data necessary. Run them as `sh _2_Downloading_from_AWS.sh <sub_list>`. The `<sub_list>` can be obtained by running `_1_parsing_for_subjects.py`.
@@ -50,10 +50,16 @@ We analyse subset of the data acquired by Healthy Brain Network (HBN). `_2_Downl
 Once the dataset is downloaded, next step is loading the dataset, perform preprocessing and export them into MNE datastructure. To do so, `_3_loading_datasets.py` needs to be run. Follow the folder structure provided above for a hassle-free usage. Sources of the scalp-level EEG are estimated using eLORETA + BEM, implemented in MNE-Python. `_4_Source_Inversion_video1.py`, `_4_Source_Inversion_video2.py`, and `_4_Source_Inversion_rest.py` contain the full-pipeline for the source inversion. 
 
 ## Structural Connectome construction
-Please refer to the guide at https://hackmd.io/@venki159/BJ1RGHbJp for a detailed procedure leveraging Qsiprep and Freesurfer to run in HPCs such as Compute Canada. 
+Please refer to the guide at https://hackmd.io/@venki159/BJ1RGHbJp (to be updated) for a detailed procedure leveraging Qsiprep and Freesurfer to run in HPCs such as Compute Canada. 
 
 ## Structure-Function relationship
-`_5_SDI_with_util_functions_individual_graphs.py` computes SDI with the individual graphs, and the `_5_SDI_with_util_functions_consensus_graphs.py` for the group-specific consensus graphs. Both use the utility functions from `utility_functions.py`. Related stats procedure can be found in `_8_SDI_statistics.py`. 
+`_5_SDI_with_util_functions_individual_graphs.py` computes SDI with the individual graphs. It uses the utility functions from `utility_functions.py`. Related stats procedure can be found in `_6_SDI_statistics.py`. `_9_ICC_reliability_check.py` tests for the reliability by computing the Intra-class coefficient (ICC) between Video 1 and Video 2.
+
+## Figures Generation
+Figures are generated through two scripts. `8_figures_generation.py` is the OG file that does two jobs: a:generates figures that are not spatial maps-generated; b: exports data for generating the spatial maps for `8_figures_generation_spatial_maps.py`
+
+## Miscellaneous 
+Customised `plotting_img_on_surf` function of Nilearn is in `_7_SDI_spatial_maps.py`, which comes in handy to visualize the spatial maps on the go.
 
 The above scripts are for the main analysis. What follows are for the analysis described in the supplementary material
 

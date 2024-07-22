@@ -17,5 +17,3 @@ for band in ["theta", 'widerband']:
     ISC_bundle[f'{band}'] = util_5_CorrCA.apply_cca(dic["condition1"], W, fs)[1]
 
 np.savez_compressed(f"{HOMEDIR}/Generated_data/video1/cortical_surface_related/ISC_bundle.npz", **ISC_bundle)
-
-# %%

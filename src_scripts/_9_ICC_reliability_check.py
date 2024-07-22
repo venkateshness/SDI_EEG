@@ -36,8 +36,3 @@ video1_vs_rest = np.load(f"{HOMEDIR}/Generated_data/Data_for_plots/SDI_corrected
 video2_vs_rest = np.load(f"{HOMEDIR}/Generated_data/Data_for_plots/SDI_corrected_anvideo_vs_rest_widerband.npz")['widerband']
 ICC_contrast = ICC_compute(video1_vs_rest, video2_vs_rest)
 
-# %%
-icc_video1_and_video2
-# %%
-ICC_contrast
-# %%

@@ -2,7 +2,7 @@ for CURSUBJ in $(cat $1)
 do
 # Mac users, an app Cyberduck comes in very handy listing the files from the AWS bucket on-the-go
 
-## if "aws: not found" appears, do PATH=~/.local/bin:$PATH
+## if "aws: not found" appears, you might need to do PATH=~/.local/bin:$PATH
 
 #Video 1
     aws s3 cp s3://fcp-indi/data/Projects/HBN/EEG/${CURSUBJ}/EEG/preprocessed/csv_format/Video3_data.csv src_data/video1/${CURSUBJ}/ --no-sign-request

@@ -1,5 +1,5 @@
 """Memory intensive jobs below; can spike up to 50GB of memory requirement"""
-#%%
+
 import mne
 import numpy as np
 
@@ -13,7 +13,7 @@ from nilearn import datasets, surface
 
 HOMEDIR = "/users/local/Venkatesh/structure-function-eeg" 
 # A very nice overview of the Source Localization workflow : https://mne.tools/stable/overview/cookbook.html
-#%%
+
 with np.load(
     f"{HOMEDIR}/src_data/sourcespace_to_glasser_labels.npz"
 ) as dobj:  # shoutout to https://github.com/rcruces/2020_NMA_surface-plot.git

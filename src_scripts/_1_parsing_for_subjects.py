@@ -1,10 +1,7 @@
-#%%
 import scipy
 import numpy as np
 import pandas as pd
 import ezodf
-import os
-
 
 HOMEDIR = "/users/local/Venkatesh/structure-function-eeg/"  # os.path.abspath(os.getcwd())
 

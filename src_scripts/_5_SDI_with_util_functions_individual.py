@@ -4,8 +4,6 @@ import numpy as np
 import importlib
 import utility_functions
 importlib.reload(utility_functions)
-import _7_SDI_spatial_maps
-importlib.reload(_7_SDI_spatial_maps)
 from tqdm import tqdm
 
 HOMEDIR = "/users/local/Venkatesh/structure-function-eeg/"
@@ -51,16 +49,15 @@ def SDI(graph, condition):
     
     np.savez_compressed(f"{HOMEDIR}/Generated_data/{condition}/Graph_SDI_related/empirical_SDI.npz", **empirical_SDI_bundle)
     np.savez_compressed(f"{HOMEDIR}/Generated_data/{condition}/Graph_SDI_related/surrogate_SDI.npz", **surrogate_SDI_bundle)
-#%%
+
 #movie
 graph  = np.load(f"{HOMEDIR}/src_data/individual_graphs.npz")
 movie_SDI = SDI(graph, 'video1')
-#%%
+
 #rest
 graph  = np.load(f"{HOMEDIR}/src_data/individual_graphs.npz")
 SDI(graph, 'rest')
-#%%
+
 #anothervideo
 graph  = np.load(f"{HOMEDIR}/src_data/individual_graphs.npz")
 SDI(graph, 'video2')
-#%%

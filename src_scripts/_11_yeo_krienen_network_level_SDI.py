@@ -101,6 +101,3 @@ for i in range(7):
         sns.heatmap(significance_df.astype(float), cmap='inferno', annot=True, fmt=".1f", xticklabels=band_labels, yticklabels=band_labels)
         plt.show()
 
-# %%
-np.mean(rho)
-# %%
