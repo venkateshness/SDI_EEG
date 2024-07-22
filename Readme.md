@@ -22,20 +22,16 @@ Project is organized as follows:
     │   │   ├── cortical_surface_related
     │   │   ├── SDI_related
     │   │   └── preprocessed_dataset
-    │   ├── video1_consensus/
-    │   │   └── SDI_related
-    │   └── video2_consensus/
-    │       └── SDI_related
     ├── src_data/
     │   ├── video1
     │   ├── video2
     │   ├── rest
     │   └── ....
-    ├── Results/
-    │   ├── Figure1/
-    │   ├── ...
-    │   └── Figure7/
-    ├── src_scripts
+    ├── src_scripts/
+    │   ├── ....
+    │   ├── ....
+    │   ├── ....
+    │   └── ....
     ├── .gitignore
     ├── readme.md
     └── requirements.txt
