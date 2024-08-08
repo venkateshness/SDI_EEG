@@ -25,7 +25,7 @@ path_Glasser = f"{HOMEDIR}/src_data/Glasser_masker.nii.gz"
 #%%
 
 n=10
-condition = 'video2'
+condition = 'video1'
 empi_SDI = np.log2(np.mean(np.squeeze(np.load(HOMEDIR + f"Generated_data/{condition}/Graph_SDI_related/empirical_SDI.npz")[f'widerband']), axis=0))
 
 for i in np.arange(0,1,1/n):
@@ -92,7 +92,6 @@ def parallelize_compute(i, nii):
 
 res = {}
 results = Parallel (n_jobs=10, backend='loky')(delayed(parallelize_compute)(i, nii) for i, nii in tqdm(enumerate(sorted(os.listdir(f'{HOMEDIR}/decoding_images/{condition}')))))
-#%%
 
 
 df = pd.DataFrame()
@@ -101,17 +100,17 @@ for i in range(len(results)):
     res_decoded_ = res_decoded_.rename(index={i:i.split('__')[1] for i in list(res_decoded_.index)})
     df[str(i*10)+'-'+str((i*10)+10)] = res_decoded_.mean(axis=1)
 
-
+#%%
 
 plt.style.use('fivethirtyeight')
-def plot_heatmap(min_=2.3, plotData=None):
+def plot_heatmap(min_, plotData):
     
     max_ = 12.45
     
     sns.set(context="paper", font= 'sans-serif', font_scale=5)
     f, (ax1) = plt.subplots(nrows=1,ncols=1,figsize=(25, 25), sharey=True)
     heatmapOrder = getOrder(np.array(df),min_)
-    plotData = df.reindex(df.index[heatmapOrder]) #df.reindex(index)
+    # plotData = df.reindex(df.index[heatmapOrder]) #df.reindex(index)
 
     
     
@@ -130,15 +129,25 @@ def plot_heatmap(min_=2.3, plotData=None):
 
     
     plt.draw()
-    np.savez_compressed(f'{HOMEDIR}/revision/Data_for_plots_revision/decoding_{condition}_heatmap_test.npz', data=plotData)
+    # np.savez_compressed(f'{HOMEDIR}/revision/Data_for_plots_revision/decoding_{condition}_heatmap_test.npz', data=plotData)
     
 
 
+index = ['42_visual_cortex_sensory', '17_motor_cortex_hand',
+       '20_control_conflict_task', '40_face_faces_facial',
+       '47_attention_attentional_target', '16_response_inhibition_control',
+       '9_memory_working_wm', '7_reward_feedback_striatum',
+       '19_action_actions_observation', '37_language_reading_word',
+       '32_pain_somatosensory_stimulation', '41_imagery_mental_events',
+       '33_memory_retrieval_encoding', '45_motion_perception_visual',
+       '8_mpfc_social_medial', '28_social_empathy_moral',
+       '6_auditory_speech_temporal', '30_decision_making_risk',
+       '26_emotional_amygdala_negative', '18_number_ips_numerical']      
 
-plot_heatmap(3.1, None)
+
+plotData = df.reindex(index)
+plot_heatmap(3.1,plotData)
 
 # %%
-df
-# %%
-res_decoded_
+
 # %%
