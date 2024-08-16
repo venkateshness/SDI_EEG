@@ -24,7 +24,7 @@ graph  = np.load(f"{HOMEDIR}/src_data/individual_graphs.npz")
 
 n_subjects = 43
 n_roi = 360
-
+#%%
 def SDI_strongest_ISC(onset, band, n_surrogates=19):
     """SDI during strongest and weakest ISC periods
     Args:
@@ -111,13 +111,13 @@ def SDI_strongest_ISC(onset, band, n_surrogates=19):
     return data_for_weak_and_strong
 
 corrca_ts_band_strong =np.load(f"{HOMEDIR}/Generated_data/video1/cortical_surface_related/ISC_bundle.npz")['theta']
-data_for_theta = SDI_strongest_ISC([np.argmin(corrca_ts_band_strong[0, 5:165]), np.argmax(corrca_ts_band_strong[0, 5:165])] , 'theta')
+# data_for_theta = SDI_strongest_ISC([np.argmin(corrca_ts_band_strong[0, 5:165]), np.argmax(corrca_ts_band_strong[0, 5:165])] , 'theta')
 
 corrca_ts_band_weak =np.load(f"{HOMEDIR}/Generated_data/video1/cortical_surface_related/ISC_bundle.npz")['widerband']
-data_for_wideband = SDI_strongest_ISC([np.argmin(corrca_ts_band_weak[0, 5:165]), np.argmax(corrca_ts_band_weak[0, 5:165])] , 'widerband')
+# data_for_wideband = SDI_strongest_ISC([np.argmin(corrca_ts_band_weak[0, 5:165]), np.argmax(corrca_ts_band_weak[0, 5:165])] , 'widerband')
 
-np.savez_compressed(f'{HOMEDIR}/Generated_data/Data_for_plots/SDI_strong_weak_ISC_theta.npz', **data_for_theta)
-np.savez_compressed(f'{HOMEDIR}/Generated_data/Data_for_plots/SDI_strong_weak_ISC_widerband.npz', **data_for_wideband)
+# np.savez_compressed(f'{HOMEDIR}/Generated_data/Data_for_plots/SDI_strong_weak_ISC_theta.npz', **data_for_theta)
+# np.savez_compressed(f'{HOMEDIR}/Generated_data/Data_for_plots/SDI_strong_weak_ISC_widerband.npz', **data_for_wideband)
 
 
 # %%
@@ -131,13 +131,16 @@ def SDI_in_seconds(band):
     elif band=='widerband':
         envelope_bandpassed = np.load(f"{HOMEDIR}/Generated_data/video1/cortical_surface_related/parcellated_widerband.npz")
     
+    
+    
     lf_bundle = list()
     hf_bundle = list()
 
     #empirical SDI
-    for sub, signal in envelope_bandpassed.items():
+    for idx, (sub, signal) in tqdm(enumerate(envelope_bandpassed.items())):
         connectome = graph[sub]
         _, eigenvals, eigenvectors = utility_functions.eigmodes(connectome)
+
         lf, hf = utility_functions.fullpipeline(signal, eigenvectors, eigenvals, in_seconds=True, is_surrogate=False)
 
         lf_bundle.append(lf)
@@ -146,7 +149,7 @@ def SDI_in_seconds(band):
     return lf_bundle, hf_bundle
 
 
-for band in ['theta', 'widerband']:
+for band in ['widerband']:
     corrca_ts = np.load(f"{HOMEDIR}/Generated_data/video1/cortical_surface_related/ISC_bundle.npz")[f'{band}']
 
     lf_b, hf_b = SDI_in_seconds(f'{band}')
@@ -154,13 +157,13 @@ for band in ['theta', 'widerband']:
     lf_b_reshaped = np.reshape(lf_b, (43, 360, 170, 125))
     hf_b_reshaped = np.reshape(hf_b, (43, 360, 170, 125))
 
-    lf_b_normed = np.linalg.norm(lf_b_reshaped, axis=3)
-    hf_b_normed = np.linalg.norm(hf_b_reshaped, axis=3)
+    lf_b_normed = np.linalg.norm(lf_b_reshaped, axis=-1)
+    hf_b_normed = np.linalg.norm(hf_b_reshaped, axis=-1)
 
     SDI_seconds = np.log2(hf_b_normed/lf_b_normed)
 
-    strong_time = np.argmax(corrca_ts_band_strong[0, 5:165]) #np.random.randint(5, 165)
-    weak_time = np.argmin(corrca_ts_band_strong[0, 5:165]) #np.random.randint(5, 165)
+    strong_time = np.random.randint(5, 165)#np.argmax(corrca_ts_band_strong[0, 5:165]) 
+    weak_time =  np.random.randint(5, 165) #np.argmin(corrca_ts_band_strong[0, 5:165])
 
     strong_ISC = SDI_seconds[:, :, strong_time]
     weak_ISC = SDI_seconds[:, :, weak_time]
@@ -168,11 +171,16 @@ for band in ['theta', 'widerband']:
     plt.show()
     
     obs_ttest_rel = stats.ttest_rel(strong_ISC, weak_ISC, axis=0)
-    fdr = multitest.fdrcorrection(obs_ttest_rel.pvalue, alpha=0.05 )
+    # fdr = multitest.fdrcorrection(obs_ttest_rel.pvalue, alpha=0.05 )
 
-    signal_to_plot = fdr[0]*obs_ttest_rel.statistic
+    signal_to_plot = obs_ttest_rel[0]*(obs_ttest_rel[1]<0.01) #fdr[0]*obs_ttest_rel.statistic
     nifti = signals_to_img_labels(signal_to_plot, path_Glasser, mnitemp["mask"])
     _7_SDI_spatial_maps.customized_plotting_img_on_surf(stat_map=nifti, threshold=1e-20, cmap='cold_hot', views=["lateral", "medial"], hemispheres=["left", "right"], colorbar=False)
     plt.show()
 
 
+
+# %%
+obs_ttest_rel[1][obs_ttest_rel[1]<0.01]
+# %%
+np.random.randint(5, 165)

@@ -21,8 +21,8 @@ def stats_full_test(bands, condition):
     
     for band in bands:
         
-        empi_SDI = np.squeeze(np.load(HOMEDIR + f"/revision/Generated_data_revision/{condition}/Graph_SDI_related_no_envelope_signal/empirical_SDI.npz")[f'{band}'])
-        surrogate_SDI =np.load(f'{HOMEDIR}/revision/Generated_data_revision/{condition}/Graph_SDI_related_no_envelope_signal/surrogate_SDI.npz')[f'{band}']
+        empi_SDI = np.squeeze(np.load(HOMEDIR + f"/revision/Generated_data_revision/{condition}/Graph_SDI_related/empirical_SDI_temporally_shuffled.npz")[f'{band}'])
+        surrogate_SDI =np.load(f'{HOMEDIR}/revision/Generated_data_revision/{condition}/Graph_SDI_related/surrogate_SDI_temporally_shuffled.npz')[f'{band}']
         
         max_sdi_surr = np.max( surrogate_SDI, axis=0)
         min_sdi_surr = np.min( surrogate_SDI, axis=0)
@@ -33,7 +33,7 @@ def stats_full_test(bands, condition):
 
         x =range(101)
         y = stats.binom.sf(x, 100, p = 0.05)
-        THRsubjs = np.min(np.where(y<0.05/360))
+        THRsubjs = np.min(np.where(y<0.00000000000001/360))
         THRsubjs = np.floor((n_subjects)/100*THRsubjs)+1
         SDI_high = np.where(detect_max>THRsubjs)
         SDI_low = np.where(detect_min>THRsubjs)
@@ -46,7 +46,6 @@ def stats_full_test(bands, condition):
         empi_sig[np.where(empi_sig==0)] = 1
 
         SDI_final = np.log2(empi_sig)
-        # SDI_anvideo.append(SDI_final)
 
         SDI_final[SDI_final<-1] = -1
         SDI_final[SDI_final>1] = 1
@@ -59,10 +58,9 @@ def stats_full_test(bands, condition):
         # if band == 'wideband':
         #     nifti.to_filename(f"{HOMEDIR}/Generated_data_revision/{condition}/Graph_SDI_related/SDI_{band}_{condition}.nii.gz")
         # if band == 'widerband':
-        #     nifti.to_filename(f"{HOMEDIR}/Generated_data_revision/{condition}/Graph_SDI_related/SDI_{band}_{condition}.nii.gz")
+        #     nifti.to_filename(f"{HOMEDIR}/revision/Generated_data_revision/{condition}/Graph_SDI_related/SDI_{band}_{condition}_newsetup.nii.gz")
         
         _7_SDI_spatial_maps.customized_plotting_img_on_surf(stat_map=nifti, threshold=1e-20, vmin=-1, vmax=1, cmap='cold_hot', views=["lateral", "medial"], hemispheres=["left", "right"], colorbar=False)
         # plotting.plot_img_on_surf(stat_map=nifti, vmin=-1, vmax=1, threshold=0.0001, title=f'{condition}/ wideband no-envelope')
     return SDI
 #%%
-

@@ -27,6 +27,7 @@ def eigmodes(W):
         degree, np.matmul(W, degree)
     )
     [eigvals, eigevecs] = la.eigh(laplacian)
+    
     return laplacian, eigvals, eigevecs
 
 
@@ -97,6 +98,7 @@ def fullpipeline(envelope, eigevecs, eigvals, is_surrogate=False, in_seconds=Fal
 
     psd_power_avg, psd_power = compute_gpsd(signal_for_gft, eigevecs)
     critical_freq = split_gpsd(psd_power_avg, eigvals)
+    
     low_freq =  np.zeros((regions, regions))
     low_freq[:,:critical_freq] = np.array(eigevecs)[ :, :critical_freq]
 

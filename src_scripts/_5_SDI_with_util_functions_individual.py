@@ -8,6 +8,7 @@ import _7_SDI_spatial_maps
 importlib.reload(_7_SDI_spatial_maps)
 from tqdm import tqdm
 
+
 HOMEDIR = "/users/local/Venkatesh/structure-function-eeg/"
 path_Glasser = f"{HOMEDIR}/src_data/Glasser_masker.nii.gz"
 
