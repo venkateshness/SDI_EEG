@@ -289,12 +289,51 @@ bands = {}
 for band, (low, high) in band_ranges.items():
     band_data = {}
     for sub_id, data in video_watching_bundle_STC.items():
-        frequencies, times, Zxx = stft(data, fs=fs, nperseg=25)
-        bandpassed = (frequencies >= low) & (frequencies < high)
+        bandpassed = butter_bandpass_filter(data, lowcut=low, highcut=high, fs=125)
         
-        band_data[f'{sub_id}'] = np.mean(np.abs(Zxx)[:, bandpassed, :], axis = 1)
+        band_data[f'{sub_id}'] = bandpassed
     
     bands[band] = band_data
     np.savez_compressed(f'{HOMEDIR}/revision/Generated_data_revision/video1/cortical_surface_related/{band}_bandpassed', **band_data)
 
+
 # %%
+# import matplotlib.pyplot as plt
+# import numpy as np
+# from scipy import signal
+# # signal_ts = np.load('/users/local/Venkatesh/structure-function-eeg/Generated_data/video1/cortical_surface_related/parcellated_widerband.npz')
+
+# for band_label in band_ranges.keys():
+    
+#     signal_ts=dict(bands[f'{band_label}']).values()
+#     psd = signal.welch(list(signal_ts), fs=125)
+#     psd_averaged = np.average(psd[1], axis=(0,1))
+#     plt.plot(psd[0], psd_averaged)
+#     plt.title(f"Time- and subj- averaged PSD for bandpassed signals")   
+    
+# plt.legend()
+# plt.show()
+#%%
+# import mne
+# signal_ts = mne.io.read_raw_fif('/users/local/Venkatesh/structure-function-eeg/Generated_data/video1/preprocessed_dataset/NDARCD401HGZ/raw.fif')
+# mne.viz.plot_raw_psd(signal_ts, fmin=0, fmax=100)
+
+# # %%
+# from scipy.signal import welch
+# import matplotlib.pyplot as plt
+# import numpy as np
+# signal_ts = np.load('/users/local/Venkatesh/structure-function-eeg/Generated_data/video1/cortical_surface_related/parcellated_widerband.npz')
+# fs=125
+# # Parameters should match those in MNE psd_welch
+# frequencies, psd = welch(list(signal_ts.values()), fs, nperseg=1024, noverlap=512, window='hann')
+
+# # Plot the PSD
+# plt.figure()
+# plt.semilogy(frequencies, np.average(psd, axis=(0,1)))
+# plt.fill_betweenx(x1 = 59, x2=61, y=np.average(psd, axis=(0,1)), alpha=0.4, color='orange')
+# plt.title(f"Time- and subj- averaged PSD for raw EEG")
+
+# plt.xlabel('Frequency (Hz)')
+
+# plt.ylabel('PSD (log)')
+# plt.show()

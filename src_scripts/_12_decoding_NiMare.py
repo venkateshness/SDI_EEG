@@ -17,7 +17,10 @@ import numpy as np
 from nilearn import plotting
 import nibabel as nib
 import os
-HOMEDIR = "/users/local/Venkatesh/structure-function-eeg/"
+import warnings
+
+
+HOMEDIR = "/users/local/Venkatesh/SDI_EEG/structure-function-eeg"
 from nilearn.regions import signals_to_img_labels
 from nilearn.datasets import fetch_icbm152_2009
 mnitemp = fetch_icbm152_2009()
@@ -26,23 +29,23 @@ path_Glasser = f"{HOMEDIR}/src_data/Glasser_masker.nii.gz"
 
 n=10
 condition = 'video1'
-empi_SDI = np.log2(np.mean(np.squeeze(np.load(HOMEDIR + f"/revision/Generated_data_revision/{condition}/Graph_SDI_related/empirical_SDI_temporally_shuffled.npz")[f'widerband']), axis=0))
+empi_SDI = np.log2(np.mean(np.squeeze(np.load(HOMEDIR + f"/Generated_data/{condition}/Graph_SDI_related/empirical_SDI.npz")[f'widerband']), axis=0))
 
-for i in np.arange(0,1,1/n):
-    b_inf = i
-    b_sup = i+1/n
+# for i in np.arange(0,1,1/n):
+#     b_inf = i
+#     b_sup = i+1/n
     
-    lower = np.quantile(empi_SDI, b_inf)
-    upper = np.quantile(empi_SDI, b_sup)
+#     lower = np.quantile(empi_SDI, b_inf)
+#     upper = np.quantile(empi_SDI, b_sup)
 
-    binarized = np.where(np.logical_and(empi_SDI>lower, empi_SDI<=upper))
+#     binarized = np.where(np.logical_and(empi_SDI>lower, empi_SDI<=upper))
     
-    zeros = np.zeros(empi_SDI.shape)
-    zeros[binarized[0]] = 1
+#     zeros = np.zeros(empi_SDI.shape)
+#     zeros[binarized[0]] = 1
     
-    nifti= signals_to_img_labels(zeros, path_Glasser, mnitemp["mask"])
+#     nifti= signals_to_img_labels(zeros, path_Glasser, mnitemp["mask"])
     
-    nifti.to_filename(f'{HOMEDIR}/decoding_images/{condition}/SDI_{condition}_{round(i,2)}.nii.gz')
+#     nifti.to_filename(f'{HOMEDIR}/decoding_images/{condition}/SDI_{condition}_{round(i,2)}.nii.gz')
 
 # %%
 
@@ -161,8 +164,12 @@ plot_heatmap(3.1, df)
 # %%
 
 # %%
-
+df.max().max()
 # %%
+#change in cut-off
 #video1:14.45
 #video2:14.94
 #rest:12.43
+# %%
+#change in ordering of topics
+#video 1: 11.06

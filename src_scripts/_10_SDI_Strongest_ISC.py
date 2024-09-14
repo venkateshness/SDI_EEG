@@ -154,26 +154,26 @@ for band in ['widerband']:
 
     lf_b, hf_b = SDI_in_seconds(f'{band}')
 
-    lf_b_reshaped = np.reshape(lf_b, (43, 360, 170, 125))
-    hf_b_reshaped = np.reshape(hf_b, (43, 360, 170, 125))
+    # lf_b_reshaped = np.reshape(lf_b, (43, 360, 170, 125))
+    # hf_b_reshaped = np.reshape(hf_b, (43, 360, 170, 125))
 
-    lf_b_normed = np.linalg.norm(lf_b_reshaped, axis=-1)
-    hf_b_normed = np.linalg.norm(hf_b_reshaped, axis=-1)
+    # lf_b_normed = np.linalg.norm(lf_b_reshaped, axis=-1)
+    # hf_b_normed = np.linalg.norm(hf_b_reshaped, axis=-1)
 
-    SDI_seconds = np.log2(hf_b_normed/lf_b_normed)
+    SDI_seconds = np.log2(np.array(hf_b)/np.array(lf_b))
 
     strong_time = np.random.randint(5, 165)#np.argmax(corrca_ts_band_strong[0, 5:165]) 
     weak_time =  np.random.randint(5, 165) #np.argmin(corrca_ts_band_strong[0, 5:165])
 
-    strong_ISC = SDI_seconds[:, :, strong_time]
-    weak_ISC = SDI_seconds[:, :, weak_time]
+    strong_ISC = SDI_seconds[:, strong_time,:]
+    weak_ISC = SDI_seconds[:, weak_time, :]
 
     plt.show()
     
     obs_ttest_rel = stats.ttest_rel(strong_ISC, weak_ISC, axis=0)
-    # fdr = multitest.fdrcorrection(obs_ttest_rel.pvalue, alpha=0.05 )
+    fdr = multitest.fdrcorrection(obs_ttest_rel.pvalue, alpha=0.05 )
 
-    signal_to_plot = obs_ttest_rel[0]*(obs_ttest_rel[1]<0.01) #fdr[0]*obs_ttest_rel.statistic
+    signal_to_plot = fdr[0]*obs_ttest_rel.statistic
     nifti = signals_to_img_labels(signal_to_plot, path_Glasser, mnitemp["mask"])
     _7_SDI_spatial_maps.customized_plotting_img_on_surf(stat_map=nifti, threshold=1e-20, cmap='cold_hot', views=["lateral", "medial"], hemispheres=["left", "right"], colorbar=False)
     plt.show()
@@ -181,6 +181,4 @@ for band in ['widerband']:
 
 
 # %%
-obs_ttest_rel[1][obs_ttest_rel[1]<0.01]
-# %%
-np.random.randint(5, 165)
+

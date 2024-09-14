@@ -91,25 +91,39 @@ subjects = 1
 
 
 def fullpipeline(envelope, eigevecs, eigvals, is_surrogate=False, in_seconds=False):
+    
     signal_for_gft = envelope
-
     
-    psd = np.matmul(np.array(eigevecs).T, signal_for_gft)
-
+    psd_reshaped = np.matmul(np.array(eigevecs).T, signal_for_gft)
+    seconds = int(np.shape(signal_for_gft)[1]/125)
     psd_power_avg, psd_power = compute_gpsd(signal_for_gft, eigevecs)
-    critical_freq = split_gpsd(psd_power_avg, eigvals)
+    psd_power_time_avg = np.mean(np.reshape(psd_power, (regions, seconds, 125)), axis=-1)
     
-    low_freq =  np.zeros((regions, regions))
-    low_freq[:,:critical_freq] = np.array(eigevecs)[ :, :critical_freq]
+    critical_freq = [split_gpsd(psd_power_time_avg[:, i], eigvals) for i in range(np.shape(psd_power_time_avg)[1])]
 
-    high_freq =  np.zeros((regions, regions))
-    high_freq[:,critical_freq:] = np.array(eigevecs)[ :, critical_freq:]
+    low_freq_component_all = list()
+    high_freq_component_all = list()
+    
+    for id, critical_f in enumerate(critical_freq):
+        
+        low_freq =  np.zeros((regions, regions))
+        low_freq[:,:critical_f] = np.array(eigevecs)[ :, :critical_f]
 
-    low_freq_component = np.matmul(low_freq, psd)
-    high_freq_component = np.matmul(high_freq, psd)
+        high_freq =  np.zeros((regions, regions))
+        high_freq[:,critical_f:] = np.array(eigevecs)[ :, critical_f:]
+        
+        low_freq_component = np.matmul(low_freq, psd_reshaped[:, id*125: id*125+125])
+        high_freq_component = np.matmul(high_freq, psd_reshaped[:, id*125: id*125+125])
 
-    low_freq_component_reshaped_normed = np.linalg.norm(low_freq_component, axis=-1)
-    high_freq_component_reshaped_normed = np.linalg.norm(high_freq_component, axis=-1)
+        low_freq_component_all.append(low_freq_component)
+        high_freq_component_all.append(high_freq_component)
+
+    low_freq_component_reshaped_normed = np.linalg.norm(low_freq_component_all, axis=(2))
+    high_freq_component_reshaped_normed = np.linalg.norm(high_freq_component_all, axis=(2))
+    
+    
+    # print(np.shape(low_freq_component_reshaped_normed))
+    # print(np.shape(high_freq_component_reshaped_normed))
     
     if is_surrogate:
        return low_freq_component_reshaped_normed, high_freq_component_reshaped_normed
@@ -117,10 +131,9 @@ def fullpipeline(envelope, eigevecs, eigvals, is_surrogate=False, in_seconds=Fal
     if not is_surrogate:
         if not in_seconds:
             SDI = np.log2(high_freq_component_reshaped_normed / low_freq_component_reshaped_normed)
-            return SDI, low_freq_component_reshaped_normed, high_freq_component_reshaped_normed
+            return SDI, low_freq_component_reshaped_normed, high_freq_component_reshaped_normed, critical_freq
         elif in_seconds:
-            return low_freq_component, high_freq_component
-
+            return low_freq_component_reshaped_normed, high_freq_component_reshaped_normed
 
 
 
