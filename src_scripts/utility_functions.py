@@ -86,11 +86,40 @@ def split_gpsd(gpsd,eigenvals):
     
     critical_freq = i - 1
     return critical_freq
-        
-subjects = 1
-
+    
 
 def fullpipeline(envelope, eigevecs, eigvals, is_surrogate=False, in_seconds=False):
+    signal_for_gft = envelope
+
+    
+    psd = np.matmul(np.array(eigevecs).T, signal_for_gft)
+
+    psd_power_avg, psd_power = compute_gpsd(signal_for_gft, eigevecs)
+    critical_freq = split_gpsd(psd_power_avg, eigvals)
+    low_freq =  np.zeros((regions, regions))
+    low_freq[:,:critical_freq] = np.array(eigevecs)[ :, :critical_freq]
+
+    high_freq =  np.zeros((regions, regions))
+    high_freq[:,critical_freq:] = np.array(eigevecs)[ :, critical_freq:]
+
+    low_freq_component = np.matmul(low_freq, psd)
+    high_freq_component = np.matmul(high_freq, psd)
+
+    low_freq_component_reshaped_normed = np.linalg.norm(low_freq_component, axis=-1)
+    high_freq_component_reshaped_normed = np.linalg.norm(high_freq_component, axis=-1)
+    
+    if is_surrogate:
+       return low_freq_component_reshaped_normed, high_freq_component_reshaped_normed
+    
+    if not is_surrogate:
+        if not in_seconds:
+            SDI = np.log2(high_freq_component_reshaped_normed / low_freq_component_reshaped_normed)
+            return SDI, low_freq_component_reshaped_normed, high_freq_component_reshaped_normed
+        elif in_seconds:
+            return low_freq_component, high_freq_component
+
+
+def fullpipeline_time_varying_SDI(envelope, eigevecs, eigvals, is_surrogate=False, in_seconds=False):
     
     signal_for_gft = envelope
     
@@ -122,19 +151,8 @@ def fullpipeline(envelope, eigevecs, eigvals, is_surrogate=False, in_seconds=Fal
     high_freq_component_reshaped_normed = np.linalg.norm(high_freq_component_all, axis=(2))
     
     
-    # print(np.shape(low_freq_component_reshaped_normed))
-    # print(np.shape(high_freq_component_reshaped_normed))
+    return low_freq_component_reshaped_normed, high_freq_component_reshaped_normed
     
-    if is_surrogate:
-       return low_freq_component_reshaped_normed, high_freq_component_reshaped_normed
-    
-    if not is_surrogate:
-        if not in_seconds:
-            SDI = np.log2(high_freq_component_reshaped_normed / low_freq_component_reshaped_normed)
-            return SDI, low_freq_component_reshaped_normed, high_freq_component_reshaped_normed, critical_freq
-        elif in_seconds:
-            return low_freq_component_reshaped_normed, high_freq_component_reshaped_normed
-
 
 
 

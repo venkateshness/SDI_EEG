@@ -16,7 +16,7 @@ importlib.reload(_6_SDI_statistics)
 importlib.reload(utility_functions)
 
 mnitemp = fetch_icbm152_2009()
-HOMEDIR = "/users/local/Venkatesh/structure-function-eeg/"
+HOMEDIR = "/users/local/Venkatesh/SDI_EEG/structure-function-eeg/"
 graph  = np.load(f"{HOMEDIR}/src_data/individual_graphs.npz")
 path_Glasser = f"{HOMEDIR}/src_data/Glasser_masker.nii.gz"
 
@@ -175,11 +175,11 @@ plt.tight_layout()
 #as well as the spatial maps for the first 4 columns of figure 3
 #exported data are used by the  script to generate the figures
 #%%
-grouplevel_SDI_video1=_6_SDI_statistics.stats_full_test(bands=['theta', 'alpha', 'low_beta', 'high_beta', 'gamma',  'widerband'], condition='video1')
-# grouplevel_SDI_rest=_6_SDI_statistics.stats_full_test(bands=['theta', 'alpha', 'low_beta', 'high_beta', 'gamma', 'widerband'], condition='rest')
+grouplevel_SDI_video1=_6_SDI_statistics.stats_full_test(bands=['theta', 'alpha', 'low_beta', 'high_beta', 'gamma', 'widerband'], condition='video1', changes = 'time_varying_SDI', is_time_varying_SDI=True)
+grouplevel_SDI_rest=_6_SDI_statistics.stats_full_test(bands=['theta', 'alpha', 'low_beta', 'high_beta', 'gamma', 'widerband'], condition='rest', changes = 'time_varying_SDI', is_time_varying_SDI=True)
 
-# np.savez_compressed(f"{HOMEDIR}/revision/Generated_data_revision/Data_for_plots/grouplevel_SDI_video1.npz", **grouplevel_SDI_video1)
-# np.savez_compressed(f"{HOMEDIR}/revision/Generated_data_revision/Data_for_plots/grouplevel_SDI_rest.npz", **grouplevel_SDI_rest)
+np.savez_compressed(f"{HOMEDIR}/revision/Data_for_plots_revision/time_varying_SDI/grouplevel_SDI_video1.npz", grouplevel_SDI_video1=grouplevel_SDI_video1)
+np.savez_compressed(f"{HOMEDIR}/revision/Data_for_plots_revision/time_varying_SDI/grouplevel_SDI_rest.npz", grouplevel_SDI_rest=grouplevel_SDI_rest)
 #%%
 ###################note: Fig 2; Panel c, d generated using _8.figures_generation_spatial_map.py script ############
 
@@ -215,8 +215,8 @@ for band in [ 'widerband']:#'theta', 'alpha', 'low_beta', 'high_beta', 'gamma', 
 ##### Figure  4##########
 
 #Panel a)
-grouplevel_SDI_video2=_6_SDI_statistics.stats_full_test(bands=['theta', 'alpha', 'low_beta', 'high_beta', 'gamma', 'widerband'], condition='video2') 
-np.savez_compressed(f"{HOMEDIR}/revision/Generated_data_revision/Data_for_plots/grouplevel_SDI_video2.npz", **grouplevel_SDI_video2)
+grouplevel_SDI_video2=_6_SDI_statistics.stats_full_test(bands=['theta', 'alpha', 'low_beta', 'high_beta', 'gamma', 'widerband'], condition='video2',changes = 'time_varying_SDI', is_time_varying_SDI=True) 
+np.savez_compressed(f"{HOMEDIR}/revision/Data_for_plots_revision/stft_signal/grouplevel_SDI_video2.npz", grouplevel_SDI_video2=grouplevel_SDI_video2)
 #%%
 
 #Panel b)
@@ -317,4 +317,4 @@ for band in ['theta', 'widerband']:
     # plt.savefig(f"{HOMEDIR}/Results/Figure_7/SDI_strongest_ISC_{band}.svg", dpi=300)  
     plt.show()
     
-    
+#%%

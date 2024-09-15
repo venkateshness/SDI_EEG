@@ -11,7 +11,7 @@ import os
 from nilearn import datasets, surface
 
 
-HOMEDIR = "/users/local/Venkatesh/structure-function-eeg" 
+HOMEDIR = "/users/local/Venkatesh/SDI_EEG/structure-function-eeg" 
 # A very nice overview of the Source Localization workflow : https://mne.tools/stable/overview/cookbook.html
 
 with np.load(
@@ -295,6 +295,5 @@ for band, (low, high) in band_ranges.items():
         band_data[f'{sub_id}'] = np.mean(np.abs(Zxx)[:, bandpassed, :], axis = 1)
     
     bands[band] = band_data
-    np.savez_compressed(f'{HOMEDIR}/revision/Generated_data_revision/video2/cortical_surface_related/{band}_bandpassed', **band_data)
+    np.savez_compressed(f'{HOMEDIR}/revision/Generated_data_revision/video2/cortical_surface_related/stft_signal/{band}_bandpassed', **band_data)
 
-# %%

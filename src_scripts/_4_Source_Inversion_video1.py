@@ -11,9 +11,9 @@ import os
 from nilearn import datasets, surface
 
 
-HOMEDIR = "/users/local/Venkatesh/structure-function-eeg" 
+HOMEDIR = "/users/local/Venkatesh/SDI_EEG/structure-function-eeg" 
 # A very nice overview of the Source Localization workflow : https://mne.tools/stable/overview/cookbook.html
-#%%
+
 with np.load(
     f"{HOMEDIR}/src_data/sourcespace_to_glasser_labels.npz"
 ) as dobj:  # shoutout to https://github.com/rcruces/2020_NMA_surface-plot.git
@@ -289,12 +289,13 @@ bands = {}
 for band, (low, high) in band_ranges.items():
     band_data = {}
     for sub_id, data in video_watching_bundle_STC.items():
-        bandpassed = butter_bandpass_filter(data, lowcut=low, highcut=high, fs=125)
+        frequencies, times, Zxx = stft(data, fs=fs, nperseg=25)
+        bandpassed = (frequencies >= low) & (frequencies < high)
         
-        band_data[f'{sub_id}'] = bandpassed
+        band_data[f'{sub_id}'] = np.mean(np.abs(Zxx)[:, bandpassed, :], axis = 1)
     
     bands[band] = band_data
-    np.savez_compressed(f'{HOMEDIR}/revision/Generated_data_revision/video1/cortical_surface_related/{band}_bandpassed', **band_data)
+    np.savez_compressed(f'{HOMEDIR}/revision/Generated_data_revision/video1/cortical_surface_related/stft_signal/{band}_bandpassed', **band_data)
 
 
 # %%
@@ -337,3 +338,5 @@ for band, (low, high) in band_ranges.items():
 
 # plt.ylabel('PSD (log)')
 # plt.show()
+#%%
+
